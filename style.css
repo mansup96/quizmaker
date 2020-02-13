@@ -1,0 +1,12 @@
+.red {
+	color: red
+}
+section	{
+	display: flex;
+	justify-content: center;
+}
+.container {
+	width: 1180px;
+	background-color: blue;
+	height: 800px;
+}
