@@ -1,20 +1,38 @@
-let div = document.createElement("div"),
-  container = document.querySelector(".container");
-div.className = "red";
-div.innerHTML = "Привет, епта!";
-// body.append(div);
+let container = document.querySelector(".container");
 
-function divCreate(classList, id) {
-  let elem = document.createElement("div");
-  if (typeof classList === "object")
-    for (let i = 0; i < classList.length; i++) {
-      elem.classList.add(classList[i]);
-		}
-	else elem.classList.add(classList)
-	elem.id = id
-	return elem
+function createElem(tag, classList, attrs, innerHTML = "") {
+  let elem = document.createElement(tag);
+  if (Array.isArray(classList)) elem.classList.add(...classList);
+  else elem.classList.add(classList);
+  for (let key in attrs) {
+    elem.setAttribute(key, attrs[key]);
+  }
+  elem.innerHTML = innerHTML;
+  return elem;
 }
 
+function createHTMLBranch(array) {
+  array.forEach((node, i) => {
+    if (Array.isArray(array[i + 1])) {
+      createHTMLBranch(array[i + 1]);
+    }
+    else array[i].append(array[i + 1]);
+  });
+}
 
-
-console.log(divCreate(['класс1', 'класс2'], 'id'));
+createHTMLBranch([
+  container,
+  [
+    [
+      createElem("div", "new-class", { id: "idishnik" }),
+      [
+        createElem("div", "title", { id: "title" }),
+        createElem("div", "sub-title", { id: "sub-title" })
+      ]
+    ],
+    createElem("img", "start-page-img", {
+      src:
+        "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,h_650/sgp59amwpq4agwdvk5z6.jpg"
+    })
+  ]
+]);
