@@ -21,12 +21,10 @@ const pageMap = {
 // }
 
 function pageManager({ pages }, container) {
-  if (pages.length <= 0) {
-    return;
-  }
+  if (pages <= 0) return;
 
-  let currentPageIndex = -1;
-  let result = [];
+  let currentPageIndex = -1,
+    result = [];
 
   function handleReady(answer) {
     result[currentPageIndex] = answer;
@@ -35,46 +33,45 @@ function pageManager({ pages }, container) {
   }
 
   function goNext() {
+    container.innerHTML = "";
+
     currentPageIndex++;
 
-    const currentPage = pages[currentPageIndex];
+    if (pages[currentPageIndex]) {
+      let currentPage = pages[currentPageIndex];
 
-    if (currentPage) {
-      container.innerHTML = "";
-      const pageConfig = getPageBuilder(currentPage)({
+      let pageConfig = getPageBuilder(currentPage)({
         ...currentPage,
         onReady: handleReady
       });
 
       createHTMLBranch(pageConfig, container);
-
-      return;
-    }
-
-    goFinalPage();
+    } else goFinalPage();
   }
 
+
+  goNext();
+
   function goFinalPage() {
-    container.innerHTML = "";
     createHTMLBranch(
       [
         {
           tag: "div",
-          childNodes: result.map((item, idx) => ({
-            tag: "h1",
-            value: `Page${idx}: ${item}`
-          }))
+          childNodes: result.map((item, i) => {
+            return {
+              tag: "h1",
+              value: `Page ${i} : ${item}`
+            };
+          })
         }
       ],
       container
     );
   }
 
-  function getPageBuilder(pageConfig) {
-    return pageMap[pageConfig.questionType];
+  function getPageBuilder(currentPage) {
+    return pageMap[currentPage.questionType];
   }
-
-  goNext();
 }
 
 export default pageManager;
