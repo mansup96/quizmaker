@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script src="../dist/app.bundle.js"></script>
+  <body>
+    <div class="container">
+      <div class="progress-bar"></div>
+    </div>
+    <script>
+      const schemna = [
+          { tag: "div", classList: "start-page", attrs: { id: "startPage" } }
+        ],
+        container = document.querySelector(".container");
+
+      pageManager(
+        {
+          pages: [
+            {
+              questionType: "radio",
+              question: "Как дела?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "Как делwergwergа?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "Как деhgfcxhgfjла?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "Как делfghlkutylа?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "Как деruytjetrhyла?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "Как делgqwergа?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "Как дzxfvvxzfzXFела?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "radio",
+              question: "че мутиzxfxzшь?",
+              options: ["yjhv", "sadfsadf", "adsfas"]
+            }
+          ]
+        },
+        container
+      );
+      // 	createHTMLBranch(radioPage({
+      //   questionsCount: 7,
+      //   question: "Какой утюг предпочитаете?",
+      //   options: ["yКрасивый", "афыва", "йцукецй", "смичсмттчсм", "щшщнгшд"]
+      // }), container)
+    </script>
+  </body>
+</html>
