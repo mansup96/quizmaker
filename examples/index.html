@@ -7,27 +7,29 @@
   </head>
   <script src="../dist/app.bundle.js"></script>
   <body>
-    <div class="container">
-      <div class="progress-bar"></div>
-    </div>
+    <div class="container"></div>
     <script>
-      const schemna = [
-          { tag: "div", classList: "start-page", attrs: { id: "startPage" } }
-        ],
-        container = document.querySelector(".container");
+      container = document.querySelector(".container");
 
       pageManager(
         {
+          startPage: {
+            imgSrc:
+              "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,h_650/sgp59amwpq4agwdvk5z6.jpg",
+            title: "Ну привет, епта!",
+            subtitle: "Нормально тебе?",
+            buttonValue: "Ехала!"
+          },
           pages: [
             {
               questionType: "radio",
               question: "Как дела?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
+              options: ["yjhv", "sadfsadf", "adsfas", "dsfsafsa"]
             },
             {
               questionType: "radio",
               question: "Как делwergwergа?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
+              options: ["yjhv", "sadfsadf", "adsfas", "ахуеть"]
             },
             {
               questionType: "radio",

@@ -1,4 +1,4 @@
-function radioPage({ onReady, questionsCount, question, options }) {
+function radioPageBuilder({ onReady, questionsCount, question, options }) {
   let schema = [
     {
       tag: "div",
@@ -17,8 +17,8 @@ function radioPage({ onReady, questionsCount, question, options }) {
               tag: "li",
               classList: "option",
               value: item,
-							attrs: { id: i.toString() },
-							onclick: () => onReady(item)
+              attrs: { id: i.toString() },
+              onclick: () => onReady(item)
             };
             return option;
           })
@@ -29,10 +29,4 @@ function radioPage({ onReady, questionsCount, question, options }) {
   return schema;
 }
 
-let schema = {
-  questionsCount: 7,
-  question: "Какой утюг предпочитаете?",
-  options: ["Красивый", "афыва", "йцукецй", "смичсмттчсм", "щшщнгшд"]
-};
-
-export default radioPage;
+export default radioPageBuilder;

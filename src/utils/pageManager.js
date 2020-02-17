@@ -1,77 +1,62 @@
-import RadioPage from "../pageTypes/radio-page";
+import RadioPageBuilder from "../pageTypes/radioPageBuilder";
+import StartPageBuilder from "../pageTypes/startPageBuilder";
 import createHTMLBranch from "./createHTMLBranch";
 
 const pageMap = {
-  radio: RadioPage
+  radio: RadioPageBuilder
 };
 
-// let config = {
-// 	pages : [
-// 		{
-// 			questionType : 'radio',
-// 			question: 'Как дела?',
-// 			options: ['yjhv','sadfsadf','adsfas'],
-// 		},
-// 		{
-// 			questionType : 'radio',
-// 			question: 'че мутишь?',
-// 			options: ['yjhv','sadfsadf','adsfas'],
-// 		},
-// 	]
-// }
+function pageManager({ startPage, pages, finalPage }, container) {
+  let currentPageIndex;
+  let result;
 
-function pageManager({ pages }, container) {
-  if (pages <= 0) return;
+  function goFirstPage() {
+    if (pages.length <= 0) return;
+    currentPageIndex = 0;
 
-  let currentPageIndex = -1,
-    result = [];
+    container.innerHTML = "";
 
+    let firstPage = pages[currentPageIndex];
+    firstPage.onReady = handleReady;
+    let pageConfig = getPageType()(firstPage);
+
+    createHTMLBranch(pageConfig, container);
+	}
+	
   function handleReady(answer) {
     result[currentPageIndex] = answer;
 
-    goNext();
+    goNextPage();
   }
 
-  function goNext() {
-    container.innerHTML = "";
+  function getPageType() {
+    console.log("sdafas");
 
+    return pageMap[pages[currentPageIndex].questionType];
+  }
+
+  function goNextPage() {
     currentPageIndex++;
 
-    if (pages[currentPageIndex]) {
-      let currentPage = pages[currentPageIndex];
+    container.innerHTML = "";
 
-      let pageConfig = getPageBuilder(currentPage)({
-        ...currentPage,
-        onReady: handleReady
-      });
+    let currentPage = pages[currentPageIndex];
 
-      createHTMLBranch(pageConfig, container);
-    } else goFinalPage();
+    currentPage.onReady = handleReady;
+
+    let pageConfig = getPageType()(currentPage);
+
+    createHTMLBranch(pageConfig, container);
   }
 
+  function goStartPage() {
+    startPage.onReady = goFirstPage;
 
-  goNext();
+    let pageConfig = StartPageBuilder(startPage);
 
-  function goFinalPage() {
-    createHTMLBranch(
-      [
-        {
-          tag: "div",
-          childNodes: result.map((item, i) => {
-            return {
-              tag: "h1",
-              value: `Page ${i} : ${item}`
-            };
-          })
-        }
-      ],
-      container
-    );
+    createHTMLBranch(pageConfig, container);
   }
-
-  function getPageBuilder(currentPage) {
-    return pageMap[currentPage.questionType];
-  }
+  goStartPage();
 }
 
 export default pageManager;

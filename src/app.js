@@ -1,5 +1,5 @@
 import createHTMLBranch from './utils/createHTMLBranch'
-import radioPage from './pageTypes/radio-page'
+import radioPage from './pageTypes/radioPageBuilder'
 import pageManager from './utils/pageManager'
 
 if(typeof window !== 'undefined') {
