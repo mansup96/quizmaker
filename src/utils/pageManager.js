@@ -8,7 +8,7 @@ const pageMap = {
 
 function pageManager({ startPage, pages, finalPage }, container) {
   let currentPageIndex;
-  let result;
+  let result = [];
 
   function goFirstPage() {
     if (pages.length <= 0) return;
@@ -24,6 +24,8 @@ function pageManager({ startPage, pages, finalPage }, container) {
 	}
 	
   function handleReady(answer) {
+		debugger
+ 
     result[currentPageIndex] = answer;
 
     goNextPage();
@@ -34,7 +36,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
     return pageMap[pages[currentPageIndex].questionType];
   }
-
+ 
   function goNextPage() {
     currentPageIndex++;
 
