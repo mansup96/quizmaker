@@ -1,10 +1,10 @@
 import createHTMLBranch from './utils/createHTMLBranch'
-import radioPage from './pageTypes/radioPageBuilder'
+import radioPage from './pageTypes/radioQuestBuilder'
 import pageManager from './utils/pageManager'
 
 if(typeof window !== 'undefined') {
 	window.createHTMLBranch = createHTMLBranch
-	window.radioPage = radioPage
+	window.radioQuestBuilder = radioPage
 	window.pageManager = pageManager
 }
 
