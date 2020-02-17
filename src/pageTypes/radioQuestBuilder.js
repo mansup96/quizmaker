@@ -1,4 +1,4 @@
-function radioQuestBuilder({ onReady, questionsCount, question, options }) {
+function radioPageBuilder({ onReady, questionsCount, question, options }) {
   let schema = [
     {
       tag: "div",
@@ -29,4 +29,4 @@ function radioQuestBuilder({ onReady, questionsCount, question, options }) {
   return schema;
 }
 
-export default radioQuestBuilder;
+export default radioPageBuilder;

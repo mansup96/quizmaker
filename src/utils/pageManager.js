@@ -1,9 +1,11 @@
 import RadioQuestBuilder from "../pageTypes/radioQuestBuilder";
 import StartPageBuilder from "../pageTypes/startPageBuilder";
 import createHTMLBranch from "./createHTMLBranch";
+import ImgRadioQuestBuilder from '../pageTypes/imgRadioQuestBuilder'
 
 const pageMap = {
-  radio: RadioQuestBuilder
+	radio: RadioQuestBuilder,
+	imgRadio: ImgRadioQuestBuilder
 };
 
 function pageManager({ startPage, pages, finalPage }, container) {
