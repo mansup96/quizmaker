@@ -1,4 +1,4 @@
-function radioQuestBuilder({ onReady, questionsCount, question, options }) {
+function imgRadioQuestBuilder({ onReady, questionsCount, question, options }) {
   let schema = [
     {
       tag: "div",
@@ -13,7 +13,8 @@ function radioQuestBuilder({ onReady, questionsCount, question, options }) {
           tag: "div",
           classList: "option",
           attrs: { id: i.toString() },
-          onclick: () => onReady(item),
+          onclick: () =>
+            onReady({ question: question, answer: item.optionDescr }),
           childNodes: [
             {
               tag: "img",
@@ -26,8 +27,8 @@ function radioQuestBuilder({ onReady, questionsCount, question, options }) {
         return option;
       })
     }
-  ];
+  ]; 
   return schema;
 }
 
-export default radioQuestBuilder;
+export default imgRadioQuestBuilder;

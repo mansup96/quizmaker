@@ -18,7 +18,7 @@ function radioPageBuilder({ onReady, questionsCount, question, options }) {
               classList: "option",
               value: item,
               attrs: { id: i.toString() },
-              onclick: () => onReady(item)
+              onclick: () => onReady({question : question, answer: item}) 
             };
             return option;
           })
