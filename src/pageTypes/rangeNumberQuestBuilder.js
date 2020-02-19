@@ -43,7 +43,7 @@ function rangeNumberQuestBuilder({
               tag: "div",
               classList: "progress-indikator",
               attrs: {
-                style: `background-color: red; height: 20px; width: ${defaultWidth}%`
+                style: `transition: .3s; background-color: red; height: 20px; width: ${defaultWidth}%`
               }
             }
           ]
@@ -56,14 +56,11 @@ function rangeNumberQuestBuilder({
   let input = rangeQuestion.querySelector(".range-input"),
     progressIndikator = rangeQuestion.querySelector(".progress-indikator");
 
-  input.addEventListener("input", changeProgress());
-
-  function changeProgress() {
-    console.log(input.value);
-
-    gamma = input.value;
-    progressIndikator.style.width = defaultWidth;
-  }
+  input.addEventListener("input", () => {
+    let progressWidth = ((input.value - minValue) * 100) / delta;
+    progressIndikator.style.width = `${progressWidth}%`;
+    console.log(progressWidth);
+  });
 
   return rangeQuestion;
 }
