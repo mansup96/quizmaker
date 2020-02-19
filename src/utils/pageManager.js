@@ -2,12 +2,14 @@ import RadioQuestBuilder from "../pageTypes/radioQuestBuilder";
 import StartPageBuilder from "../pageTypes/startPageBuilder";
 import createHTMLBranch from "./createHTMLBranch";
 import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
+import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
 import FinalPageBuilder from "../pageTypes/finalPageBuilder";
 
 const pageMap = {
   radio: RadioQuestBuilder,
-  imgRadio: ImgRadioQuestBuilder
+  imgRadio: ImgRadioQuestBuilder,
+  rangeNumber: rangeNumberQuestBulder
 };
 
 function pageManager({ startPage, pages, finalPage }, container) {
@@ -43,7 +45,6 @@ function pageManager({ startPage, pages, finalPage }, container) {
     currentPageIndex++;
 
     flipQuestion();
-    
   }
 
   function goPrevQuestion() {
@@ -61,10 +62,10 @@ function pageManager({ startPage, pages, finalPage }, container) {
       currentPage.onReady = handleReady;
       let pageConfig = getPageType()(currentPage);
 
-      createHTMLBranch(pageConfig, questionWrapper);
-		}
-		
-		if (currentPageIndex >= pages.length) goFinalPage(); 
+			createHTMLBranch(pageConfig, questionWrapper);
+    }
+
+    if (currentPageIndex >= pages.length) goFinalPage();
   }
 
   function goFinalPage() {

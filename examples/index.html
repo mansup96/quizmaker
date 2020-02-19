@@ -19,48 +19,9 @@
             title: "Ну привет, епта!",
             subtitle: "Нормально тебе?",
             buttonValue: "Ехала!"
-					},
-					finalPage: {}, 
-					pages: [
-					// 	{
-					// 	questionType: 'range'
-					// },
-            {
-              questionType: "imgRadio",
-              question: "Какую?",
-              options: [
-                {
-                  optionDescr: "Кантри",
-                  imgSrc:
-                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/jzoaqzgufkezbc8a8qlk.jpg"
-                },
-                {
-                  optionDescr: "Классика",
-                  imgSrc:
-                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/mkirudpejz9aa9fv54v9.jpg"
-                },
-                {
-                  optionDescr: "Лофт",
-                  imgSrc:
-                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
-                },
-                {
-                  optionDescr: "Модерн",
-                  imgSrc:
-                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
-                },
-                {
-                  optionDescr: "Прованс",
-                  imgSrc:
-                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
-                },
-                {
-                  optionDescr: "Хайтек",
-                  imgSrc:
-                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/wodxnjwriyxzbabms4um.jpg"
-                }
-              ]
-            },
+          },
+          finalPage: {},
+          pages: [
             {
               questionType: "radio",
               question: "Как дела?",
@@ -100,16 +61,54 @@
               questionType: "radio",
               question: "че мутиzxfxzшь?",
               options: ["yjhv", "sadfsadf", "adsfas"]
-            }
+						},
+						{
+              questionType: "rangeNumber",
+              question: "Сколько?",
+              defaultValue: 65,
+              minValue: 30,
+              maxValue: 100
+            },
+            {
+              questionType: "imgRadio",
+              question: "Какую?",
+              options: [
+                {
+                  optionDescr: "Кантри",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/jzoaqzgufkezbc8a8qlk.jpg"
+                },
+                {
+                  optionDescr: "Классика",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/mkirudpejz9aa9fv54v9.jpg"
+                },
+                {
+                  optionDescr: "Лофт",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
+                },
+                {
+                  optionDescr: "Модерн",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
+                },
+                {
+                  optionDescr: "Прованс",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
+                },
+                {
+                  optionDescr: "Хайтек",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/wodxnjwriyxzbabms4um.jpg"
+                }
+              ]
+            },
           ]
         },
         cont
       );
-      // 	createHTMLBranch(radioPage({
-      //   questionsCount: 7,
-      //   question: "Какой утюг предпочитаете?",
-      //   options: ["yКрасивый", "афыва", "йцукецй", "смичсмттчсм", "щшщнгшд"]
-      // }), container)
     </script>
   </body>
 </html>

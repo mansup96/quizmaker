@@ -1,4 +1,6 @@
-function radioPageBuilder({ onReady, questionsCount, question, options }) {
+import CreateHTML from '../utils/createHTMLBranch'
+
+function radioPageBuilder({ onReady, question, options }) {
   let schema = [
     {
       tag: "div",
@@ -25,7 +27,8 @@ function radioPageBuilder({ onReady, questionsCount, question, options }) {
         }
       ]
     }
-  ];
+	];
+	CreateHTML(schema)
   return schema;
 }
 
