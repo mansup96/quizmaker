@@ -1,3 +1,6 @@
+import CreateHTML from "../utils/createHTMLBranch";
+import ElemCreator from "../utils/createElem";
+
 function rangeNumberQuestBuilder({
   onReady,
   question,
@@ -5,6 +8,7 @@ function rangeNumberQuestBuilder({
   minValue,
   defaultValue
 }) {
+  let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let delta = maxValue - minValue,
     gamma = defaultValue - minValue,
     defaultWidth = (gamma * 100) / delta;
@@ -37,7 +41,7 @@ function rangeNumberQuestBuilder({
           childNodes: [
             {
               tag: "div",
-              classList: "progress-indicakor",
+              classList: "progress-indikator",
               attrs: {
                 style: `background-color: red; height: 20px; width: ${defaultWidth}%`
               }
@@ -47,7 +51,21 @@ function rangeNumberQuestBuilder({
       ]
     }
   ];
-  return schema;
+  let rangeQuestion = CreateHTML(schema, questWrapper);
+
+  let input = rangeQuestion.querySelector(".range-input"),
+    progressIndikator = rangeQuestion.querySelector(".progress-indikator");
+
+  input.addEventListener("input", changeProgress());
+
+  function changeProgress() {
+    console.log(input.value);
+
+    gamma = input.value;
+    progressIndikator.style.width = defaultWidth;
+  }
+
+  return rangeQuestion;
 }
 
 export default rangeNumberQuestBuilder;

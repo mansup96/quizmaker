@@ -1,4 +1,8 @@
+import CreateHTML from "../utils/createHTMLBranch";
+import ElemCreator from "../utils/createElem"; 
+
 function imgRadioQuestBuilder({ onReady, questionsCount, question, options }) {
+  let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let schema = [
     {
       tag: "div",
@@ -27,8 +31,9 @@ function imgRadioQuestBuilder({ onReady, questionsCount, question, options }) {
         return option;
       })
     }
-  ]; 
-  return schema;
+  ];
+  let imgRadioQuestion = CreateHTML(schema, questWrapper);
+  return imgRadioQuestion;
 }
 
 export default imgRadioQuestBuilder;

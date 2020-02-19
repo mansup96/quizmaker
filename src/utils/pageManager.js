@@ -60,9 +60,11 @@ function pageManager({ startPage, pages, finalPage }, container) {
     let currentPage = pages[currentPageIndex];
     if (currentPage) {
       currentPage.onReady = handleReady;
-      let pageConfig = getPageType()(currentPage);
 
-			createHTMLBranch(pageConfig, questionWrapper);
+      let questionDomObj = getPageType()(currentPage);
+
+      questionWrapper.append(questionDomObj);
+      // createHTMLBranch(pageConfig, questionWrapper);
     }
 
     if (currentPageIndex >= pages.length) goFinalPage();
@@ -76,7 +78,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
     createHTMLBranch(pageConfig, container);
   }
 
-  function handleReady({ answer: answer, question: question }) {
+  function handleReady({ answer, question }) {
     result[currentPageIndex] = {};
 
     result[currentPageIndex].question = question;
