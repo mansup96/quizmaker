@@ -21,9 +21,9 @@ function pageManager({ startPage, pages, finalPage }, container) {
   function goStartPage() {
     startPage.onReady = goFirstQuestion;
 
-    let pageConfig = StartPageBuilder(startPage);
+    let startPageDOM = StartPageBuilder(startPage);
 
-    createHTMLBranch(pageConfig, container);
+    container.append(startPageDOM);
   }
 
   function goFirstQuestion() {
@@ -35,7 +35,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
       onClickNext: goNextQuestion,
       onClickPrev: goPrevQuestion
     };
-    createHTMLBranch(QuestionWrapBuilder(wrapConfig), container);
+    container.append(QuestionWrapBuilder(wrapConfig));
 
     flipQuestion();
   }
@@ -64,7 +64,6 @@ function pageManager({ startPage, pages, finalPage }, container) {
       let questionDomObj = getPageType()(currentPage);
 
       questionWrapper.append(questionDomObj);
-      // createHTMLBranch(pageConfig, questionWrapper);
     }
 
     if (currentPageIndex >= pages.length) goFinalPage();
@@ -73,9 +72,9 @@ function pageManager({ startPage, pages, finalPage }, container) {
   function goFinalPage() {
     container.innerHTML = "";
     finalPage.onReady = () => console.log("точно конец");
-    let pageConfig = FinalPageBuilder(finalPage);
+    let finalPageDOM = FinalPageBuilder(finalPage);
 
-    createHTMLBranch(pageConfig, container);
+    container.append(finalPageDOM);
   }
 
   function handleReady({ answer, question }) {

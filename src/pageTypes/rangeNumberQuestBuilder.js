@@ -34,7 +34,7 @@ function rangeNumberQuestBuilder({
         },
         {
           tag: "div",
-          classList: "progressbar-wrapper",
+          classList: "progressbar",
           attrs: {
             style: "background-color: black; height: 20px; width: 100%"
           },
@@ -43,8 +43,18 @@ function rangeNumberQuestBuilder({
               tag: "div",
               classList: "progress-indikator",
               attrs: {
-                style: `transition: .3s; background-color: red; height: 20px; width: ${defaultWidth}%`
-              }
+                style: `position: relative; transition: .1s; background-color: red; height: 20px; width: ${defaultWidth}%`
+              },
+              childNodes: [
+                {
+                  tag: "p",
+                  classList: "runner",
+                  attrs: {
+                    style: `position: absolute; height: 30px; width: 10px; right: -5px; background-color: green; margin: 0; top: -5px;`
+                    // draggable: "true"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -54,12 +64,44 @@ function rangeNumberQuestBuilder({
   let rangeQuestion = CreateHTML(schema, questWrapper);
 
   let input = rangeQuestion.querySelector(".range-input"),
-    progressIndikator = rangeQuestion.querySelector(".progress-indikator");
+    progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
+    progressBar = rangeQuestion.querySelector(".progressbar");
 
   input.addEventListener("input", () => {
     let progressWidth = ((input.value - minValue) * 100) / delta;
     progressIndikator.style.width = `${progressWidth}%`;
-    console.log(progressWidth);
+  });
+
+  progressBar.addEventListener("mousedown", () => {
+    if (event.which === 1) {
+      let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
+        barWidth = progressBar.offsetWidth,
+        step = barWidth / delta,
+        widthFromMouse = Math.round(mousePos / step) + minValue;
+
+      let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
+      progressIndikator.style.width = `${progressWidth}%`;
+      input.value = widthFromMouse;
+    }
+  });
+
+  let runner = rangeQuestion.querySelector(".runner");
+
+  runner.addEventListener("mousedown", () => {
+    if (event.which === 1) {
+      console.log("sdfas");
+
+      progressBar.addEventListener("mousemove", () => { 
+        let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
+          barWidth = progressBar.offsetWidth,
+          step = barWidth / delta,
+          widthFromMouse = Math.round(mousePos / step) + minValue;
+
+        let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
+        progressIndikator.style.width = `${progressWidth}%`;
+        input.value = widthFromMouse;
+      });
+    }
   });
 
   return rangeQuestion;

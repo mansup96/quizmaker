@@ -1,4 +1,8 @@
+import CreateHTML from "../utils/createHTMLBranch";
+import ElemCreator from "../utils/createElem";
+
 function startPageBuilder({ title, subtitle, imgSrc, buttonValue, onReady }) {
+	let startPageWrapper = ElemCreator({ tag: "div", classList: "startPage-wrapper" });
   let schema = [
     {
       tag: "div",
@@ -40,7 +44,8 @@ function startPageBuilder({ title, subtitle, imgSrc, buttonValue, onReady }) {
       ]
     }
   ];
-  return schema;
+	let startPage = CreateHTML(schema, startPageWrapper);
+	return startPage
 }
 
 export default startPageBuilder;
