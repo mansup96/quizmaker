@@ -78,44 +78,42 @@ function rangeNumberQuestBuilder({
     progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
     progressBar = rangeQuestion.querySelector(".progressbar");
 
-  addHandler(input, "input", syncBarWithInput());
+  addHandler(input, "input", syncBarWithInput);
   function syncBarWithInput() {
     let progressWidth = ((input.value - minValue) * 100) / delta;
     progressIndikator.style.width = `${progressWidth}%`;
   }
 
-  addHandler(progressBar, "mousedown", getValueFromMouse());
+  addHandler(progressBar, "mousedown", getValueFromMouse);
   function getValueFromMouse() {
-    if (event.which === 1) { 
+    if (event.which === 1) {
       let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
         barWidth = progressBar.offsetWidth,
         step = barWidth / delta,
         widthFromMouse = Math.round(mousePos / step) + minValue;
-
-      let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
-      progressIndikator.style.width = `${progressWidth}%`;
-      input.value = widthFromMouse;
+      if (mousePos < barWidth) {
+        let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
+        progressIndikator.style.width = `${progressWidth}%`;
+        input.value = widthFromMouse;
+      }
     }
   }
 
   let runner = rangeQuestion.querySelector(".runner");
 
-  runner.addEventListener("mousedown", () => {
+  addHandler(runner, "mousedown", addMouseMoveToRunner);
+
+  function addMouseMoveToRunner() {
     if (event.which === 1) {
-      console.log("sdfas");
-
-      window.addEventListener("mousemove", () => {
-        let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
-          barWidth = progressBar.offsetWidth,
-          step = barWidth / delta,
-          widthFromMouse = Math.round(mousePos / step) + minValue;
-
-        let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
-        progressIndikator.style.width = `${progressWidth}%`;
-        input.value = widthFromMouse;
-      });
+      addHandler(window, "mousemove", getValueFromMouse); 
     }
-  });
+  }
+
+  addHandler(
+    runner,
+    "mouseup",
+    removeHandler(window, "mousemove", getValueFromMouse)
+  );
 
   return rangeQuestion;
 }
