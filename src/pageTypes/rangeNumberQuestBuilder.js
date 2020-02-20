@@ -61,19 +61,32 @@ function rangeNumberQuestBuilder({
       ]
     }
   ];
+  function addHandler(object, event, handler) {
+    if (object.addEventListener) {
+      object.addEventListener(event, handler, false);
+      // } else if (object.attachEvent) {
+      //   object.attachEvent("on" + event, handler);
+    } else alert("Обработчик не поддерживается");
+  }
+  function removeHandler(object, event, handler) {
+    object.removeEventListener(event, handler, false);
+  }
+
   let rangeQuestion = CreateHTML(schema, questWrapper);
 
   let input = rangeQuestion.querySelector(".range-input"),
     progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
     progressBar = rangeQuestion.querySelector(".progressbar");
 
-  input.addEventListener("input", () => {
+  addHandler(input, "input", syncBarWithInput());
+  function syncBarWithInput() {
     let progressWidth = ((input.value - minValue) * 100) / delta;
     progressIndikator.style.width = `${progressWidth}%`;
-  });
+  }
 
-  progressBar.addEventListener("mousedown", () => {
-    if (event.which === 1) {
+  addHandler(progressBar, "mousedown", getValueFromMouse());
+  function getValueFromMouse() {
+    if (event.which === 1) { 
       let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
         barWidth = progressBar.offsetWidth,
         step = barWidth / delta,
@@ -83,7 +96,7 @@ function rangeNumberQuestBuilder({
       progressIndikator.style.width = `${progressWidth}%`;
       input.value = widthFromMouse;
     }
-  });
+  }
 
   let runner = rangeQuestion.querySelector(".runner");
 
@@ -91,7 +104,7 @@ function rangeNumberQuestBuilder({
     if (event.which === 1) {
       console.log("sdfas");
 
-      progressBar.addEventListener("mousemove", () => { 
+      window.addEventListener("mousemove", () => {
         let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
           barWidth = progressBar.offsetWidth,
           step = barWidth / delta,
