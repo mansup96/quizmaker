@@ -26,21 +26,6 @@ function pageManager({ startPage, pages, finalPage }, container) {
     container.append(startPageDOM);
   }
 
-  // function goFirstQuestion() {
-  //   if (pages.length <= 0) return;
-  //   currentPageIndex = 0;
-
-  //   container.innerHTML = "";
-  //   let wrapConfig = {
-  //     onClickNext: goNextQuestion,
-  // 		onClickPrev: goPrevQuestion,
-  // 		result
-  //   };
-  //   container.append(QuestionWrapBuilder(wrapConfig));
-
-  //   flipQuestion();
-  // }
-
   function getBtnsConfig() {
     if (pages[currentPageIndex]) {
       let wrapConfig = {
@@ -72,8 +57,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
     container.innerHTML = "";
 
     getBtnsConfig();
-    flipQuestion();
-    П;
+    flipQuestion(); 
   }
 
   function flipQuestion() {
@@ -83,9 +67,12 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
     if (currentPage) {
       currentPage.onReady = handleReady;
-
+      if (result[currentPageIndex]) {
+        currentPage.selectedOption = result[currentPageIndex].selectedOption;
+      }
       let questionDomObj = getPageType()(currentPage);
-
+			console.log(result) ;
+			
       questionWrapper.append(questionDomObj);
     }
 
@@ -98,9 +85,10 @@ function pageManager({ startPage, pages, finalPage }, container) {
     let finalPageDOM = FinalPageBuilder(finalPage);
 
     container.append(finalPageDOM);
+    console.log(result);
   }
 
-  function handleReady({ answer, question }) {
+  function handleReady({ answer, question, selectedOption }) {
     result[currentPageIndex] = {};
 
     // if (currentPageIndex) {
@@ -109,8 +97,8 @@ function pageManager({ startPage, pages, finalPage }, container) {
     // }
 
     result[currentPageIndex].question = question;
-
     result[currentPageIndex].answer = answer;
+    result[currentPageIndex].selectedOption = selectedOption;
 
     if (pages[currentPageIndex].questionType !== "rangeNumber")
       goNextQuestion();

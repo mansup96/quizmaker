@@ -6,9 +6,15 @@ export default function createElem({
   onclick
 } = {}) {
   let elem = document.createElement(tag);
-  if (classList) elem.classList.add(classList);
+  if (classList instanceof Array) {
+    classList.forEach(className => {
+      elem.classList.add(className);
+    });
+  } else {
+    elem.classList.add(classList);
+  }
   for (let key in attrs) {
-    elem.setAttribute(key, attrs[key]);
+    elem.setAttribute(key, attrs[key]); 
   }
   if (value) {
     elem.innerHTML = value;

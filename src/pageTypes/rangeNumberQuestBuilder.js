@@ -6,12 +6,17 @@ function rangeNumberQuestBuilder({
   question,
   maxValue,
   minValue,
-  defaultValue
+  defaultValue,
+  selectedOption
 }) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let delta = maxValue - minValue,
-    gamma = defaultValue - minValue,
-    defaultWidth = (gamma * 100) / delta;
+    gamma = defaultValue - minValue;
+  if (selectedOption) {
+    gamma = selectedOption - minValue;
+    defaultValue = selectedOption; 
+  }
+  let defaultWidth = (gamma * 100) / delta;
   let schema = [
     {
       tag: "div",
@@ -61,11 +66,10 @@ function rangeNumberQuestBuilder({
       ]
     }
   ];
+
   function addHandler(object, event, handler) {
     if (object.addEventListener) {
       object.addEventListener(event, handler, false);
-      // } else if (object.attachEvent) {
-      //   object.attachEvent("on" + event, handler);
     } else alert("Обработчик не поддерживается");
   }
   function removeHandler(object, event, handler) {
@@ -78,14 +82,22 @@ function rangeNumberQuestBuilder({
     progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
     progressBar = rangeQuestion.querySelector(".progressbar");
 
-  onReady({ question: question, answer: input.value });
+  onReady({
+    question: question,
+    answer: input.value,
+    selectedOption: input.value
+  });
 
   addHandler(input, "input", syncBarWithInput);
   function syncBarWithInput() {
     let progressWidth = ((input.value - minValue) * 100) / delta;
     progressIndikator.style.width = `${progressWidth}%`;
     progressIndikator.style.transition = `.2s`;
-    onReady({ question: question, answer: input.value });
+    onReady({
+      question: question,
+      answer: input.value,
+      selectedOption: input.value
+    });
   }
 
   addHandler(progressBar, "mousedown", getValueFromMouse);
@@ -100,7 +112,11 @@ function rangeNumberQuestBuilder({
         let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
         progressIndikator.style.width = `${progressWidth}%`;
         input.value = widthFromMouse;
-        onReady({ question: question, answer: input.value });
+        onReady({
+          question: question,
+          answer: input.value,
+          selectedOption: input.value
+        });
       }
     }
   }

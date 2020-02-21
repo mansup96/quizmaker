@@ -1,7 +1,13 @@
 import CreateHTML from "../utils/createHTMLBranch";
-import ElemCreator from "../utils/createElem"; 
+import ElemCreator from "../utils/createElem";
 
-function imgRadioQuestBuilder({ onReady, questionsCount, question, options }) {
+function imgRadioQuestBuilder({
+  onReady,
+  questionsCount,
+  question,
+  options,
+  selectedOption
+}) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let schema = [
     {
@@ -18,7 +24,11 @@ function imgRadioQuestBuilder({ onReady, questionsCount, question, options }) {
           classList: "option",
           attrs: { id: i.toString() },
           onclick: () =>
-            onReady({ question: question, answer: item.optionDescr }),
+            onReady({
+              question: question,
+              answer: item.optionDescr,
+              selectedOption: i + 1
+            }),
           childNodes: [
             {
               tag: "img",
@@ -28,6 +38,8 @@ function imgRadioQuestBuilder({ onReady, questionsCount, question, options }) {
             { tag: "p", classList: "option-descr", value: item.optionDescr }
           ]
         };
+        if (selectedOption && i == selectedOption - 1)
+          option.classList = ["option", "selected"];
         return option;
       })
     }

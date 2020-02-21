@@ -1,7 +1,7 @@
 import CreateHTML from "../utils/createHTMLBranch";
 import ElemCreator from "../utils/createElem";
 
-function radioPageBuilder({ onReady, question, options }) {
+function radioPageBuilder({ onReady, question, options, selectedOption }) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let schema = [
     {
@@ -22,8 +22,15 @@ function radioPageBuilder({ onReady, question, options }) {
               classList: "option",
               value: item,
               attrs: { id: i.toString() },
-              onclick: () => onReady({ question: question, answer: item })
+              onclick: () =>
+                onReady({
+                  question: question,
+                  answer: item,
+                  selectedOption: i + 1
+                })
             };
+            if (selectedOption && i == selectedOption - 1)
+              option.classList = ["option", "selected"];
             return option;
           })
         }
