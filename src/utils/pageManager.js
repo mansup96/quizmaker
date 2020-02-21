@@ -53,7 +53,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
           wrapConfig.nextDisable = 1;
         }
       }
-      container.append(QuestionWrapBuilder(wrapConfig)); 
+      container.append(QuestionWrapBuilder(wrapConfig));
     }
   }
 
@@ -72,12 +72,13 @@ function pageManager({ startPage, pages, finalPage }, container) {
     container.innerHTML = "";
 
     getBtnsConfig();
-    flipQuestion();П
+    flipQuestion();
+    П;
   }
 
   function flipQuestion() {
     let questionWrapper = document.getElementById("question-wrapper");
-    questionWrapper.innerHTML = "";
+    if (questionWrapper) questionWrapper.innerHTML = "";
     let currentPage = pages[currentPageIndex];
 
     if (currentPage) {
