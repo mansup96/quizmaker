@@ -78,23 +78,29 @@ function rangeNumberQuestBuilder({
     progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
     progressBar = rangeQuestion.querySelector(".progressbar");
 
+  onReady({ question: question, answer: input.value });
+
   addHandler(input, "input", syncBarWithInput);
   function syncBarWithInput() {
     let progressWidth = ((input.value - minValue) * 100) / delta;
     progressIndikator.style.width = `${progressWidth}%`;
+    progressIndikator.style.transition = `.2s`;
+    onReady({ question: question, answer: input.value });
   }
 
   addHandler(progressBar, "mousedown", getValueFromMouse);
   function getValueFromMouse() {
     if (event.which === 1) {
+      event.preventDefault();
       let mousePos = event.clientX - progressBar.getBoundingClientRect().x,
         barWidth = progressBar.offsetWidth,
         step = barWidth / delta,
         widthFromMouse = Math.round(mousePos / step) + minValue;
-      if (mousePos < barWidth) {
+      if (mousePos < barWidth && mousePos > 0) {
         let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
         progressIndikator.style.width = `${progressWidth}%`;
         input.value = widthFromMouse;
+        onReady({ question: question, answer: input.value });
       }
     }
   }
@@ -105,16 +111,17 @@ function rangeNumberQuestBuilder({
 
   function addMouseMoveToRunner() {
     if (event.which === 1) {
-      addHandler(window, "mousemove", getValueFromMouse); 
+      addHandler(window, "mousemove", getValueFromMouse);
+      progressIndikator.style.transition = `none`;
     }
   }
 
-  addHandler(
-    runner,
-    "mouseup",
-    removeHandler(window, "mousemove", getValueFromMouse)
-  );
-
+  addHandler(runner, "mouseup", mouseUp);
+  function mouseUp() {
+    progressIndikator.style.transition = `0.2s`;
+    removeHandler(window, "mousemove", getValueFromMouse);
+    onReady({ question: question, answer: input.value });
+  }
   return rangeQuestion;
 }
 
