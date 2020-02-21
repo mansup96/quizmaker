@@ -1,9 +1,7 @@
-import createElem from './createElem'
-
+import createElem from "./createElem";
 
 function createHTMLBranch(array, initialElem) {
   array.forEach((node, i) => {
-    // debugger;
     if (typeof node === "string") {
       initialElem.append(node);
       return;
@@ -13,7 +11,10 @@ function createHTMLBranch(array, initialElem) {
     if (node.childNodes instanceof Array) {
       createHTMLBranch(node.childNodes, elem);
     }
-  });
+	})
+	
+	return initialElem; 
 }
 
-export default createHTMLBranch
+export default createHTMLBranch;
+ 

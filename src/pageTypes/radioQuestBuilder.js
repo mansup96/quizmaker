@@ -1,4 +1,8 @@
-function radioPage({ onReady, questionsCount, question, options }) {
+import CreateHTML from "../utils/createHTMLBranch";
+import ElemCreator from "../utils/createElem";
+
+function radioPageBuilder({ onReady, question, options }) {
+  let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let schema = [
     {
       tag: "div",
@@ -17,8 +21,8 @@ function radioPage({ onReady, questionsCount, question, options }) {
               tag: "li",
               classList: "option",
               value: item,
-							attrs: { id: i.toString() },
-							onclick: () => onReady(item)
+              attrs: { id: i.toString() },
+              onclick: () => onReady({ question: question, answer: item })
             };
             return option;
           })
@@ -26,13 +30,8 @@ function radioPage({ onReady, questionsCount, question, options }) {
       ]
     }
   ];
-  return schema;
+  let radioQuestion = CreateHTML(schema, questWrapper);
+  return radioQuestion;
 }
 
-let schema = {
-  questionsCount: 7,
-  question: "Какой утюг предпочитаете?",
-  options: ["Красивый", "афыва", "йцукецй", "смичсмттчсм", "щшщнгшд"]
-};
-
-export default radioPage;
+export default radioPageBuilder;

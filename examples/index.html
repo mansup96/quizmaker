@@ -7,27 +7,37 @@
   </head>
   <script src="../dist/app.bundle.js"></script>
   <body>
-    <div class="container">
-      <div class="progress-bar"></div>
-    </div>
+    <div class="container"></div>
     <script>
-      const schemna = [
-          { tag: "div", classList: "start-page", attrs: { id: "startPage" } }
-        ],
-        container = document.querySelector(".container");
-
+      let cont = document.querySelector(".container");
+      cont.set;
       pageManager(
         {
+          startPage: {
+            // imgSrc:
+              // "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,h_650/sgp59amwpq4agwdvk5z6.jpg",
+            title: "Ну привет, епта!",
+            subtitle: "Нормально тебе?",
+            buttonValue: "Ехала!"
+          },
+          finalPage: {},
           pages: [
+            {
+              questionType: "rangeNumber",
+              question: "Сколько?",
+              defaultValue: 65,
+              minValue: 30,
+              maxValue: 100
+            },
             {
               questionType: "radio",
               question: "Как дела?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
+              options: ["yjhv", "sadfsadf", "adsfas", "dsfsafsa"]
             },
             {
               questionType: "radio",
               question: "Как делwergwergа?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
+              options: ["yjhv", "sadfsadf", "adsfas", "ахуеть"]
             },
             {
               questionType: "radio",
@@ -58,16 +68,47 @@
               questionType: "radio",
               question: "че мутиzxfxzшь?",
               options: ["yjhv", "sadfsadf", "adsfas"]
+            },
+            {
+              questionType: "imgRadio",
+              question: "Какую?",
+              options: [
+                {
+                  optionDescr: "Кантри",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/jzoaqzgufkezbc8a8qlk.jpg"
+                },
+                {
+                  optionDescr: "Классика",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/mkirudpejz9aa9fv54v9.jpg"
+                },
+                {
+                  optionDescr: "Лофт",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
+                },
+                {
+                  optionDescr: "Модерн",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
+                },
+                {
+                  optionDescr: "Прованс",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/sshecoexhgp8e4jqeuq6.jpg"
+                },
+                {
+                  optionDescr: "Хайтек",
+                  imgSrc:
+                    "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,w_420,h_420,q_100,c_fill/wodxnjwriyxzbabms4um.jpg"
+                }
+              ]
             }
           ]
         },
-        container
+        cont
       );
-      // 	createHTMLBranch(radioPage({
-      //   questionsCount: 7,
-      //   question: "Какой утюг предпочитаете?",
-      //   options: ["yКрасивый", "афыва", "йцукецй", "смичсмттчсм", "щшщнгшд"]
-      // }), container)
     </script>
   </body>
 </html>
