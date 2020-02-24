@@ -5,7 +5,7 @@ import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
 import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
 import FinalPageBuilder from "../pageTypes/finalPageBuilder";
-import sendRequest from "../app";
+import sendRequest from "../utils/sendRequest";
 
 const pageMap = {
   radio: RadioQuestBuilder,
@@ -61,8 +61,8 @@ function pageManager({ startPage, pages, finalPage }, container) {
         currentPageIndex++;
         logicFlag = true;
       } else {
-				currentPageIndex += pages[currentPageIndex].logic.logicLength + 1;
-				logicFlag = false
+        currentPageIndex += pages[currentPageIndex].logic.logicLength + 1;
+        logicFlag = false;
       }
     }
     container.innerHTML = "";
@@ -73,7 +73,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
   function goPrevQuestion() {
     if (pages.length <= 0) return;
-    // debugger; 
+    // debugger;
     if (logicFlag) currentPageIndex--;
     else {
       if (currentPageIndex - 1 === endLogic)
@@ -107,7 +107,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
   function goFinalPage() {
     container.innerHTML = "";
     let requestURL = "send.php";
-    finalPage.onReady = () => sendRequest(requestURL, "post", result);
+    finalPage.onReady = () => sendRequest("POST", requestURL, result); 
     let finalPageDOM = FinalPageBuilder(finalPage);
 
     container.append(finalPageDOM);
@@ -128,7 +128,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
     if (pages[currentPageIndex].questionType !== "rangeNumber")
       goNextQuestion();
     else return;
-  }
+  } 
 
   function getPageType() {
     return pageMap[pages[currentPageIndex].questionType];
