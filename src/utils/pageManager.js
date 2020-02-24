@@ -5,6 +5,7 @@ import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
 import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
 import FinalPageBuilder from "../pageTypes/finalPageBuilder";
+import sendRequest from "../app";
 
 const pageMap = {
   radio: RadioQuestBuilder,
@@ -13,8 +14,11 @@ const pageMap = {
 };
 
 function pageManager({ startPage, pages, finalPage }, container) {
-  let currentPageIndex = -1;
-  let result = [];
+  let currentPageIndex = -1,
+    result = [],
+    logicFlag = false,
+    startLogic,
+    endLogic;
 
   goStartPage();
 
@@ -44,7 +48,23 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
   function goNextQuestion() {
     if (pages.length <= 0) return;
-    currentPageIndex++;
+    // debugger;
+    if (currentPageIndex === -1 || !pages[currentPageIndex].logic)
+      currentPageIndex++;
+    else {
+      startLogic = currentPageIndex;
+      endLogic = currentPageIndex + pages[currentPageIndex].logic.logicLength;
+      if (
+        pages[currentPageIndex].logic.logicOption ===
+        result[currentPageIndex].selectedOption - 1
+      ) {
+        currentPageIndex++;
+        logicFlag = true;
+      } else {
+				currentPageIndex += pages[currentPageIndex].logic.logicLength + 1;
+				logicFlag = false
+      }
+    }
     container.innerHTML = "";
 
     getBtnsConfig();
@@ -53,11 +73,17 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
   function goPrevQuestion() {
     if (pages.length <= 0) return;
-    currentPageIndex--;
+    // debugger; 
+    if (logicFlag) currentPageIndex--;
+    else {
+      if (currentPageIndex - 1 === endLogic)
+        currentPageIndex -= endLogic - startLogic + 1;
+      else currentPageIndex--;
+    }
     container.innerHTML = "";
 
     getBtnsConfig();
-    flipQuestion(); 
+    flipQuestion();
   }
 
   function flipQuestion() {
@@ -71,8 +97,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
         currentPage.selectedOption = result[currentPageIndex].selectedOption;
       }
       let questionDomObj = getPageType()(currentPage);
-			console.log(result) ;
-			
+
       questionWrapper.append(questionDomObj);
     }
 
@@ -81,11 +106,11 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
   function goFinalPage() {
     container.innerHTML = "";
-    finalPage.onReady = () => console.log("точно конец");
+    let requestURL = "send.php";
+    finalPage.onReady = () => sendRequest(requestURL, "post", result);
     let finalPageDOM = FinalPageBuilder(finalPage);
 
     container.append(finalPageDOM);
-    console.log(result);
   }
 
   function handleReady({ answer, question, selectedOption }) {
