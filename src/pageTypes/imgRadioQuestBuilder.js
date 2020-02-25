@@ -17,11 +17,11 @@ function imgRadioQuestBuilder({
     },
     {
       tag: "div",
-      classList: "options-container",
+      classList: "img-radio-options-container",
       childNodes: options.map((item, i) => {
         let option = {
           tag: "div",
-          classList: "option",
+          classList: "answer-img-radio",
           attrs: { id: i.toString() },
           onclick: () =>
             onReady({
@@ -32,14 +32,14 @@ function imgRadioQuestBuilder({
           childNodes: [
             {
               tag: "img",
-              classList: "option-img",
+              classList: "answer-img",
               attrs: { src: item.imgSrc }
             },
-            { tag: "p", classList: "option-descr", value: item.optionDescr }
+            { tag: "p", classList: "answer-text", value: item.optionDescr }
           ]
         };
         if (selectedOption && i == selectedOption - 1)
-          option.classList = ["option", "selected"];
+          option.classList = ["answer-img-radio", "selected"];
         return option;
       })
     }

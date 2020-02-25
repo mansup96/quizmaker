@@ -12,29 +12,29 @@ function radioPageBuilder({ onReady, question, options, selectedOption }) {
     {
       tag: "div",
       classList: "options-container",
-      childNodes: [
-        {
-          tag: "ul",
-          classList: "option-list",
-          childNodes: options.map((item, i) => {
-            let option = {
-              tag: "li",
-              classList: "option",
-              value: item,
-              attrs: { id: i.toString() },
-              onclick: () =>
-                onReady({
-                  question: question,
-                  answer: item,
-                  selectedOption: i + 1
-                })
-            };
-            if (selectedOption && i == selectedOption - 1)
-              option.classList = ["option", "selected"];
-            return option;
-          })
-        }
-      ]
+      childNodes: options.map((item, i) => {
+        let option = {
+          tag: "div",
+          classList: "answer-radio",
+          attrs: { id: i.toString() },
+          onclick: () =>
+            onReady({
+              question: question,
+              answer: item,
+              selectedOption: i + 1
+            }),
+          childNodes: [
+            {
+              tag: "span",
+              classList: "answer-text",
+              value: item
+            }
+          ]
+        };
+        if (selectedOption && i == selectedOption - 1)
+          option.classList = ["answer-radio", "selected"];
+        return option;
+      })
     }
   ];
   let radioQuestion = CreateHTML(schema, questWrapper);

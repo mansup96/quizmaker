@@ -40,23 +40,17 @@ function rangeNumberQuestBuilder({
         {
           tag: "div",
           classList: "progressbar",
-          attrs: {
-            style: "background-color: black; height: 20px; width: 100%"
-          },
           childNodes: [
             {
               tag: "div",
               classList: "progress-indikator",
               attrs: {
-                style: `position: relative; transition: .1s; background-color: red; height: 20px; width: ${defaultWidth}%`
+                style: `width: ${defaultWidth}%`
               },
               childNodes: [
                 {
                   tag: "p",
-                  classList: "runner",
-                  attrs: {
-                    style: `position: absolute; height: 30px; width: 10px; right: -5px; background-color: green; margin: 0; top: -5px;`
-                  }
+                  classList: "runner"
                 }
               ]
             }
@@ -88,14 +82,16 @@ function rangeNumberQuestBuilder({
 
   addHandler(input, "input", syncBarWithInput);
   function syncBarWithInput() {
-    let progressWidth = ((input.value - minValue) * 100) / delta;
-    progressIndikator.style.width = `${progressWidth}%`;
-    progressIndikator.style.transition = `.2s`;
-    onReady({
-      question: question,
-      answer: input.value,
-      selectedOption: input.value
-    });
+    if (input.value <= maxValue) {
+      let progressWidth = ((input.value - minValue) * 100) / delta;
+      progressIndikator.style.width = `${progressWidth}%`;
+      progressIndikator.style.transition = `.2s`;
+      onReady({
+        question: question,
+        answer: input.value,
+        selectedOption: input.value
+      });
+    }
   }
 
   addHandler(progressBar, "mousedown", getValueFromMouse);
