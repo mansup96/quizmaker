@@ -15,19 +15,19 @@
       pageManager(
         {
           startPage: {
-            // imgSrc:
-            // "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,h_650/sgp59amwpq4agwdvk5z6.jpg",
-            title: "Ну привет, епта!",
-            subtitle: "Нормально тебе?",
-            buttonValue: "Ехала!"
+            imgSrc:
+            "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,h_650/sgp59amwpq4agwdvk5z6.jpg",
+            title: "Пройди тест и получи скидку!",
+            subtitle: "Ответь на несколько вопросов и мы подберем идеальную кухню!",
+            buttonValue: "Пройти тест" 
           },
           finalPage: {},
           pages: [
             {
 							questionType: "radio",
-							logic:{logicOption: 3, logicLength:2}, 
-              question: "Вопрос 1",
-              options: ["yjhv", "sadfsadf", "adsfas", "Включит логические зависимости"]
+							// logic:{logicOption: 3, logicLength:2}, 
+							question: "Какую кухню Вы планируете?",
+              options: ["Прямая", "Остров", "П-образная", "Угловая"]
             },
             {
               questionType: "rangeNumber",

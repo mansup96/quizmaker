@@ -19,7 +19,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
     logicFlag = false,
     startLogic,
     endLogic;
-
+  let questionWrapper = document.getElementById("question-wrapper");
   goStartPage();
 
   function goStartPage() {
@@ -28,13 +28,19 @@ function pageManager({ startPage, pages, finalPage }, container) {
     let startPageDOM = StartPageBuilder(startPage);
 
     container.append(startPageDOM);
+
+    // document.querySelector(".button-svg").viewBox.baseVal.width = 24;
+    // document.querySelector(".button-svg").viewBox.baseVal.height = 24; 
   }
 
   function getBtnsConfig() {
     if (pages[currentPageIndex]) {
       let wrapConfig = {
         onClickNext: goNextQuestion,
-        onClickPrev: goPrevQuestion
+				onClickPrev: goPrevQuestion,
+				quizTitle: startPage.title,
+				pagesCount: pages.length,
+				pageIndex : currentPageIndex
       };
       if (currentPageIndex === 0) wrapConfig.prevDisable = 1;
       if (pages[currentPageIndex].questionType !== "rangeNumber") {
@@ -42,13 +48,17 @@ function pageManager({ startPage, pages, finalPage }, container) {
           wrapConfig.nextDisable = 1;
         }
       }
-      container.append(QuestionWrapBuilder(wrapConfig));
+
+      let quiz = document.getElementById("quiz");
+      quiz.prepend(QuestionWrapBuilder(wrapConfig));
     }
   }
 
   function goNextQuestion() {
+    let quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
     if (pages.length <= 0) return;
-    // debugger;
+
     if (currentPageIndex === -1 || !pages[currentPageIndex].logic)
       currentPageIndex++;
     else {
@@ -65,30 +75,38 @@ function pageManager({ startPage, pages, finalPage }, container) {
         logicFlag = false;
       }
     }
-    container.innerHTML = "";
 
     getBtnsConfig();
+		let questionWrapper = document.getElementById("question-wrapper");
+		if (questionWrapper)
+    questionWrapper.innerHTML = "";
+
     flipQuestion();
   }
 
   function goPrevQuestion() {
+    let quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
     if (pages.length <= 0) return;
-    // debugger;
+
     if (logicFlag) currentPageIndex--;
     else {
       if (currentPageIndex - 1 === endLogic)
         currentPageIndex -= endLogic - startLogic + 1;
       else currentPageIndex--;
     }
-    container.innerHTML = "";
-
     getBtnsConfig();
+		let questionWrapper = document.getElementById("question-wrapper");
+		if (questionWrapper)
+    questionWrapper.innerHTML = "";
+
     flipQuestion();
   }
 
   function flipQuestion() {
     let questionWrapper = document.getElementById("question-wrapper");
     if (questionWrapper) questionWrapper.innerHTML = "";
+
     let currentPage = pages[currentPageIndex];
 
     if (currentPage) {
@@ -98,19 +116,23 @@ function pageManager({ startPage, pages, finalPage }, container) {
       }
       let questionDomObj = getPageType()(currentPage);
 
+      let questionWrapper = document.getElementById("question-wrapper");
       questionWrapper.append(questionDomObj);
     }
+    console.log(result);
 
     if (currentPageIndex >= pages.length) goFinalPage();
   }
 
   function goFinalPage() {
-    container.innerHTML = "";
+    let quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
+
     let requestURL = "send.php";
-    finalPage.onReady = () => sendRequest("POST", requestURL, result); 
+    finalPage.onReady = () => sendRequest("POST", requestURL, result);
     let finalPageDOM = FinalPageBuilder(finalPage);
 
-    container.append(finalPageDOM);
+    quiz.append(finalPageDOM); 
   }
 
   function handleReady({ answer, question, selectedOption }) {
@@ -128,7 +150,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
     if (pages[currentPageIndex].questionType !== "rangeNumber")
       goNextQuestion();
     else return;
-  } 
+  }
 
   function getPageType() {
     return pageMap[pages[currentPageIndex].questionType];

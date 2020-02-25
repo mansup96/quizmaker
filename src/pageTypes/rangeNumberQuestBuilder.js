@@ -14,7 +14,7 @@ function rangeNumberQuestBuilder({
     gamma = defaultValue - minValue;
   if (selectedOption) {
     gamma = selectedOption - minValue;
-    defaultValue = selectedOption; 
+    defaultValue = selectedOption;
   }
   let defaultWidth = (gamma * 100) / delta;
   let schema = [
@@ -56,7 +56,6 @@ function rangeNumberQuestBuilder({
                   classList: "runner",
                   attrs: {
                     style: `position: absolute; height: 30px; width: 10px; right: -5px; background-color: green; margin: 0; top: -5px;`
-                    // draggable: "true"
                   }
                 }
               ]
@@ -81,7 +80,6 @@ function rangeNumberQuestBuilder({
   let input = rangeQuestion.querySelector(".range-input"),
     progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
     progressBar = rangeQuestion.querySelector(".progressbar");
-
   onReady({
     question: question,
     answer: input.value,
@@ -136,7 +134,11 @@ function rangeNumberQuestBuilder({
   function mouseUp() {
     progressIndikator.style.transition = `0.2s`;
     removeHandler(window, "mousemove", getValueFromMouse);
-    onReady({ question: question, answer: input.value });
+    onReady({
+      question: question,
+      answer: input.value,
+      selectedOption: input.value
+    });
   }
   return rangeQuestion;
 }
