@@ -1,6 +1,6 @@
 import RadioQuestBuilder from "../pageTypes/radioQuestBuilder";
+import CheckQuestBuilder from "../pageTypes/checkQuestBuilder";
 import StartPageBuilder from "../pageTypes/startPageBuilder";
-import createHTMLBranch from "./createHTMLBranch";
 import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
 import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
@@ -8,6 +8,7 @@ import FinalPageBuilder from "../pageTypes/finalPageBuilder";
 import sendRequest from "../utils/sendRequest";
 
 const pageMap = {
+  check: CheckQuestBuilder,
   radio: RadioQuestBuilder,
   imgRadio: ImgRadioQuestBuilder,
   rangeNumber: rangeNumberQuestBulder
@@ -30,20 +31,23 @@ function pageManager({ startPage, pages, finalPage }, container) {
     container.append(startPageDOM);
 
     // document.querySelector(".button-svg").viewBox.baseVal.width = 24;
-    // document.querySelector(".button-svg").viewBox.baseVal.height = 24; 
+    // document.querySelector(".button-svg").viewBox.baseVal.height = 24;
   }
 
   function getBtnsConfig() {
     if (pages[currentPageIndex]) {
       let wrapConfig = {
         onClickNext: goNextQuestion,
-				onClickPrev: goPrevQuestion,
-				quizTitle: startPage.title,
-				pagesCount: pages.length,
-				pageIndex : currentPageIndex
+        onClickPrev: goPrevQuestion,
+        quizTitle: startPage.title,
+        pagesCount: pages.length,
+        pageIndex: currentPageIndex
       };
       if (currentPageIndex === 0) wrapConfig.prevDisable = 1;
-      if (pages[currentPageIndex].questionType !== "rangeNumber") {
+      if (
+        pages[currentPageIndex].questionType !== "rangeNumber" &&
+        pages[currentPageIndex].questionType !== "check"
+      ) {
         if (!result[currentPageIndex]) {
           wrapConfig.nextDisable = 1;
         }
@@ -77,9 +81,8 @@ function pageManager({ startPage, pages, finalPage }, container) {
     }
 
     getBtnsConfig();
-		let questionWrapper = document.getElementById("question-wrapper");
-		if (questionWrapper)
-    questionWrapper.innerHTML = "";
+    let questionWrapper = document.getElementById("question-wrapper");
+    if (questionWrapper) questionWrapper.innerHTML = "";
 
     flipQuestion();
   }
@@ -96,9 +99,8 @@ function pageManager({ startPage, pages, finalPage }, container) {
       else currentPageIndex--;
     }
     getBtnsConfig();
-		let questionWrapper = document.getElementById("question-wrapper");
-		if (questionWrapper)
-    questionWrapper.innerHTML = "";
+    let questionWrapper = document.getElementById("question-wrapper");
+    if (questionWrapper) questionWrapper.innerHTML = "";
 
     flipQuestion();
   }
@@ -119,7 +121,6 @@ function pageManager({ startPage, pages, finalPage }, container) {
       let questionWrapper = document.getElementById("question-wrapper");
       questionWrapper.append(questionDomObj);
     }
-    console.log(result);
 
     if (currentPageIndex >= pages.length) goFinalPage();
   }
@@ -128,28 +129,46 @@ function pageManager({ startPage, pages, finalPage }, container) {
     let quiz = document.getElementById("quiz");
     quiz.innerHTML = "";
 
-    let requestURL = "send.php";
-    finalPage.onReady = () => sendRequest("POST", requestURL, result);
-    let finalPageDOM = FinalPageBuilder(finalPage);
+    finalPage.onReady = endQuiz;
 
-    quiz.append(finalPageDOM); 
+    let finalPageDOM = FinalPageBuilder(finalPage);
+    quiz.append(finalPageDOM);
   }
+
+  function endQuiz(obj) {
+    result[currentPageIndex] = {};
+
+    result[currentPageIndex].question = "Имя и телефон";
+    result[currentPageIndex].answer = obj.nameValue + ", " + obj.telValue;
+
+    let requestURL = "https://xn--80a0acdi.xn--p1ai/send.php";
+    sendRequest("POST", requestURL, result);
+  } 
+
+  let checkString = "",
+    selectedOptionArray = [];
 
   function handleReady({ answer, question, selectedOption }) {
     result[currentPageIndex] = {};
 
-    // if (currentPageIndex) {
-    //   let prevButton = document.querySelector(".prev-button");
-    //   console.log(prevButton);
-    // }
-
     result[currentPageIndex].question = question;
-    result[currentPageIndex].answer = answer;
-    result[currentPageIndex].selectedOption = selectedOption;
 
-    if (pages[currentPageIndex].questionType !== "rangeNumber")
-      goNextQuestion();
-    else return;
+    if (pages[currentPageIndex].questionType == "check") {
+      checkString = checkString + answer + ", ";
+      result[currentPageIndex].answer = checkString;
+      selectedOptionArray.push(selectedOption);
+      result[currentPageIndex].selectedOption = selectedOptionArray;
+    } else {
+      result[currentPageIndex].answer = answer;
+      result[currentPageIndex].selectedOption = selectedOption;
+    } 
+
+    if (
+      pages[currentPageIndex].questionType == "rangeNumber" ||
+      pages[currentPageIndex].questionType == "check"
+    )
+      return;
+    else goNextQuestion();
   }
 
   function getPageType() {

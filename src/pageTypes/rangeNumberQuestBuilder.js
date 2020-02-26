@@ -55,6 +55,22 @@ function rangeNumberQuestBuilder({
               ]
             }
           ]
+        },
+        {
+          tag: "div",
+          classList: "extreme-points",
+          childNodes: [
+            {
+              tag: "p",
+              classList: "point",
+              value: minValue
+            },
+            {
+              tag: "p",
+              classList: "point",
+              value: maxValue
+            }
+          ]
         }
       ]
     }

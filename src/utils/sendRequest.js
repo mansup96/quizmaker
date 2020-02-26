@@ -5,17 +5,18 @@ function sendRequest(method, URL, body = null) {
     method,
     body: JSON.stringify(body),
     headers: { "Content-Type": "application/json" }
-  }).then(response => {
-    response.text().then(value => console.log(value));
+	})
+	// .then(response => {
+  //   response.text().then(value => console.log(value));
 
-    // return response.json();
+  //   // return response.json();
 
-    // return response.then(error => {
-    //   let e = new Error("Что-то пошло не так");
-    //   e.data = error;
-    //   throw e;
-    // });
-  });
+  //   // return response.then(error => {
+  //   //   let e = new Error("Что-то пошло не так");
+  //   //   e.data = error;
+  //   //   throw e;
+  //   // });
+  // });
 }
 
 // sendRequest("post", requestURL, { Name: "Mans", age: 23 })

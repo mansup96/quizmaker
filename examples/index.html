@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="quiz-style.css" />
   </head>
   <script src="../dist/app.bundle.js"></script>
   <body>
-    <div class="container"></div>
+    <div class="quiz-container"></div>
     <script>
-      let cont = document.querySelector(".container");
-      cont.set;
+      let cont = document.querySelector(".quiz-container");
+
       pageManager(
         {
           startPage: {
@@ -22,11 +22,21 @@
               "Ответь на несколько вопросов и мы подберем идеальную кухню!",
             buttonValue: "Пройти тест"
           },
-          finalPage: {},
+          finalPage: {
+            imgSrc:
+              "https://res.cloudinary.com/hgwipn3sa/image/upload/dpr_1.0,f_auto,h_650/sgp59amwpq4agwdvk5z6.jpg",
+            buttonValue: "Получить скидку"
+          },
           pages: [
             {
+              questionType: "radio",
+              // logic:{logicOption: 3, logicLength:2},
+              question: "Какую кухню Вы планируете?",
+              options: ["Прямая", "Остров", "П-образная", "Угловая"]
+            },
+            {
               questionType: "imgRadio",
-              question: "Какую?",
+              question: "В каком стиле Вы видите свою кухню?",
               options: [
                 {
                   optionDescr: "Кантри",
@@ -61,52 +71,53 @@
               ]
             },
             {
+              questionType: "check",
+              question:
+                "Выберите из перечня технику, которую планируете разместить на кухне",
+              options: [
+                "Встраиваемый холодильник",
+                "Обыкновыенный холодильник",
+                "Встраиваемая МВП (микроволновая печь)",
+                "ПММ (посудомоечная машина)",
+                "Духовой шкаф",
+                "Варочная поверхность",
+                "Вытяжка",
+                "Стиральная машина"
+              ]
+            },
+            {
+              questionType: "radio",
+              question:
+                "Предлагаем выбрать материалы фасада кухни, которые мы производим",
+              options: [
+                "Шпон",
+                "Дерево",
+                "Мебельный пластик ARPA",
+                "ПВХ пленка (более 2000 видов, цветов и текстур",
+                "Эмаль",
+                "ЛДСП (эконом-вариант)"
+              ]
+						},
+						{
               questionType: "rangeNumber",
-              question: "Вопрос 2",
-              defaultValue: 65,
-              minValue: 30,
-              maxValue: 100
+              question: "Какова ориентировочная площадь вашей кухни, м2?",
+              defaultValue: 30,
+              minValue: 5,
+              maxValue: 50
             },
             {
               questionType: "radio",
-              // logic:{logicOption: 3, logicLength:2},
-              question: "Какую кухню Вы планируете?",
-              options: ["Прямая", "Остров", "П-образная", "Угловая"]
+              question:
+                "У Вас уже есть эскиз для просчета или фото для образца?",
+              options: ["Да", "Нет, хочу индивидуальный проект"]
             },
             {
               questionType: "radio",
-              question: "Вопрос 3?",
-              options: ["yjhv", "sadfsadf", "adsfas", "ахуеть"]
-            },
-            {
-              questionType: "radio",
-              question: "Вопрос 4?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
-            },
-            {
-              questionType: "radio",
-              question: "Как делfghlkutylа?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
-            },
-            {
-              questionType: "radio",
-              question: "Как деruytjetrhyла?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
-            },
-            {
-              questionType: "radio",
-              question: "Как делgqwergа?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
-            },
-            {
-              questionType: "radio",
-              question: "Как дzxfvvxzfzXFела?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
-            },
-            {
-              questionType: "radio",
-              question: "че мутиzxfxzшь?",
-              options: ["yjhv", "sadfsadf", "adsfas"]
+              question: "Выберите свою честную скидку!",
+              options: [
+                "25% скидка на фурнитуру фирмы Blum",
+                "5% скидка на общую стоимость гарнитура"
+              ]
             }
           ]
         },
