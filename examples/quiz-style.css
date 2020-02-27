@@ -1,7 +1,13 @@
+.quiz-container *{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 .quiz-container {
   max-width: 1180px;
   height: 500px;
-  /* background-color: grey; */
+	background-color: white;
+	border-radius: 10px;
 }
 .quiz {
   font-family: sans-serif;
@@ -140,7 +146,7 @@
 .quiz .answer-radio,
 .quiz .answer-check {
   width: 49%;
-  padding: 0.8em 1em;
+  padding: 0.8em;
   border: 1px solid #f3f3f3;
   margin-bottom: 1em;
   cursor: pointer;
@@ -184,6 +190,9 @@
 .quiz .answer-img-radio {
   margin: 0 2em 0.5em 0;
 }
+.quiz .img-answer-wrapper{
+
+}
 /* range-selector */
 
 .quiz .range-input {
@@ -202,6 +211,15 @@
   -webkit-appearance: none;
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
 .quiz .runner {
   position: absolute;
   height: 20px;
@@ -218,7 +236,8 @@
   background-color: #d1e2b1;
   height: 7px;
   width: 100%;
-  border-radius: 4px;
+	border-radius: 4px;
+	cursor: pointer;
 }
 .quiz .progress-indikator {
   border-radius: 4px;
@@ -301,10 +320,14 @@
   cursor: not-allowed;
   border: none;
 }
+.is-back {
+	width: 100%;
+}
 .quiz .prev-button-icon,
 .quiz .next-button-icon {
   width: 100%;
-  height: 100%;
+	height: 100%;
+	display: flex;
 }
 .quiz .prev-button-icon svg {
   transform: rotate(180deg);
@@ -332,6 +355,7 @@
   margin-bottom: 2px;
   margin-left: 5px;
 }
+
 /* final-page */
 .quiz .input-name,
 .quiz .input-tel {
@@ -341,4 +365,10 @@
   padding: 1em 1em;
   border-radius: 5px;
   margin: 1em 0;
+}
+.alert {
+	color: red
+}
+.success {
+	color: green;
 }

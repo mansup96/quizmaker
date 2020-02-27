@@ -30,6 +30,11 @@ function finalPageBuilder({ title, imgSrc, buttonValue, onReady }) {
           classList: "start-page-sidebar",
           childNodes: [
             {
+              tag: "p",
+              classList: "title",
+              value: "Осталось только указать Ваши контакты!"
+            },
+            {
               tag: "form",
               classList: "final-form",
               childNodes: [
@@ -38,9 +43,9 @@ function finalPageBuilder({ title, imgSrc, buttonValue, onReady }) {
                   classList: "input-name",
                   attrs: {
                     type: "text",
-                    placeholder: "Ваше Имя",
-										name: "name", 
-										id: 'name', 
+                    placeholder: "Ваше Имя *",
+                    name: "name",
+                    id: "name",
                     required: "",
                     autocomplete: "on"
                   }
@@ -50,7 +55,7 @@ function finalPageBuilder({ title, imgSrc, buttonValue, onReady }) {
                   classList: "input-tel",
                   attrs: {
                     type: "tel",
-                    placeholder: "Ваш телефон",
+                    placeholder: "Ваш телефон *",
                     name: "tel",
                     required: "",
                     autocomplete: "on"
@@ -59,7 +64,7 @@ function finalPageBuilder({ title, imgSrc, buttonValue, onReady }) {
                 {
                   tag: "button",
                   classList: "send-button",
-                  attrs: { type: "submit" },
+                  // attrs: { type: "submit" },
                   // onclick: () => onClick(),
                   childNodes: [
                     {
@@ -95,6 +100,7 @@ function finalPageBuilder({ title, imgSrc, buttonValue, onReady }) {
   let nameInput = finalPage.querySelector(".input-name"),
     telInput = finalPage.querySelector(".input-tel"),
     button = finalPage.querySelector(".send-button"),
+    finalTitle = finalPage.querySelector(".title"),
     formResult = {};
 
   nameInput.addEventListener("input", () => {
@@ -107,6 +113,16 @@ function finalPageBuilder({ title, imgSrc, buttonValue, onReady }) {
     event.preventDefault();
     if (formResult.nameValue && formResult.telValue) {
       onReady(formResult);
+      nameInput.value = "";
+      telInput.value = "";
+      finalTitle.classList.toggle("success");
+      finalTitle.classList.remove("title");
+      finalTitle.innerHTML = "Ваша анкета успешно отправлена!";
+      button.style.display = "none";
+    } else {
+      finalTitle.classList.remove("title");
+      finalTitle.classList.add("alert");
+      finalTitle.innerHTML = "Пожалуйста, заполните все поля!";
     }
   });
 

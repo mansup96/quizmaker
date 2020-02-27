@@ -30,10 +30,16 @@ function imgRadioQuestBuilder({
               selectedOption: i + 1
             }),
           childNodes: [
-            {
-              tag: "img",
-              classList: "answer-img",
-              attrs: { src: item.imgSrc }
+            { 
+              tag: "div",
+              classList: "img-answer-wrapper", 
+              childNodes: [
+                {
+                  tag: "img",
+                  classList: "answer-img",
+                  attrs: { src: item.imgSrc }
+                }
+              ]
             },
             { tag: "p", classList: "answer-text", value: item.optionDescr }
           ]
