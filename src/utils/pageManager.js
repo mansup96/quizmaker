@@ -4,6 +4,7 @@ import StartPageBuilder from "../pageTypes/startPageBuilder";
 import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
 import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
+import fileQuestBuilder from "../pageTypes/fileQuestBuilder"
 import FinalPageBuilder from "../pageTypes/finalPageBuilder";
 import sendRequest from "../utils/sendRequest";
 
@@ -11,7 +12,8 @@ const pageMap = {
   check: CheckQuestBuilder,
   radio: RadioQuestBuilder,
   imgRadio: ImgRadioQuestBuilder,
-  rangeNumber: rangeNumberQuestBulder
+	rangeNumber: rangeNumberQuestBulder,
+	file: fileQuestBuilder
 };
 
 function pageManager({ startPage, pages, finalPage }, container) {
@@ -19,10 +21,12 @@ function pageManager({ startPage, pages, finalPage }, container) {
     result = [],
     logicFlag = false,
     startLogic,
-    endLogic;
-  let questionWrapper = document.getElementById("question-wrapper");
-  goStartPage();
+		endLogic;
 
+		
+  // let questionWrapper = document.getElementById("question-wrapper");
+  goStartPage();
+	
   function goStartPage() {
     startPage.onReady = goNextQuestion;
 
@@ -46,7 +50,8 @@ function pageManager({ startPage, pages, finalPage }, container) {
       if (currentPageIndex === 0) wrapConfig.prevDisable = 1;
       if (
         pages[currentPageIndex].questionType !== "rangeNumber" &&
-        pages[currentPageIndex].questionType !== "check"
+				pages[currentPageIndex].questionType !== "check" &&
+				pages[currentPageIndex].questionType !== 'file'
       ) {
         if (!result[currentPageIndex]) {
           wrapConfig.nextDisable = 1;
