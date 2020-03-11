@@ -3,6 +3,7 @@ import ElemCreator from "../utils/createElem";
 
 function chechQuestBuilder({ onReady, question, options, selectedOption }) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
+  console.log(selectedOption);
   let schema = [
     {
       tag: "div",
@@ -31,12 +32,17 @@ function chechQuestBuilder({ onReady, question, options, selectedOption }) {
             }
           ]
         };
-        if (selectedOption && i == selectedOption - 1)
-          option.classList = ["answer-check", "selected"];
+        if (selectedOption)
+          for (let j = 0; j < selectedOption.length; j++) {
+            if (i == selectedOption[j] - 1) {
+              option.classList = ["answer-check", "selected"];
+            }
+          }
         return option;
       })
     }
   ];
+
   let checkQuestion = CreateHTML(schema, questWrapper);
 
   let selectedAnswers = checkQuestion.querySelectorAll(".answer-check");

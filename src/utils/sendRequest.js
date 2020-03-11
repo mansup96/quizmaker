@@ -3,8 +3,8 @@ let requestURL = "https://jsonplaceholder.typicode.com/users";
 function sendRequest(method, URL, body = null) {
   return fetch(URL, {
     method,
-    body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json" }
+    body: body,
+    headers: { "Content-Type": "multipart/form-data" }
 	})
 	// .then(response => {
   //   response.text().then(value => console.log(value));

@@ -4,7 +4,7 @@ import StartPageBuilder from "../pageTypes/startPageBuilder";
 import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
 import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
-import fileQuestBuilder from "../pageTypes/fileQuestBuilder"
+import fileQuestBuilder from "../pageTypes/fileQuestBuilder";
 import FinalPageBuilder from "../pageTypes/finalPageBuilder";
 import sendRequest from "../utils/sendRequest";
 
@@ -12,21 +12,21 @@ const pageMap = {
   check: CheckQuestBuilder,
   radio: RadioQuestBuilder,
   imgRadio: ImgRadioQuestBuilder,
-	rangeNumber: rangeNumberQuestBulder,
-	file: fileQuestBuilder
+  rangeNumber: rangeNumberQuestBulder,
+  file: fileQuestBuilder
 };
 
 function pageManager({ startPage, pages, finalPage }, container) {
   let currentPageIndex = -1,
-    result = [],
+    result = new FormData(),
+    selectedOptions = [],
     logicFlag = false,
     startLogic,
-		endLogic;
+    endLogic;
 
-		
   // let questionWrapper = document.getElementById("question-wrapper");
   goStartPage();
-	
+
   function goStartPage() {
     startPage.onReady = goNextQuestion;
 
@@ -50,10 +50,10 @@ function pageManager({ startPage, pages, finalPage }, container) {
       if (currentPageIndex === 0) wrapConfig.prevDisable = 1;
       if (
         pages[currentPageIndex].questionType !== "rangeNumber" &&
-				pages[currentPageIndex].questionType !== "check" &&
-				pages[currentPageIndex].questionType !== 'file'
+        pages[currentPageIndex].questionType !== "check" &&
+        pages[currentPageIndex].questionType !== "file"
       ) {
-        if (!result[currentPageIndex]) {
+        if (!selectedOptions[currentPageIndex]) {
           wrapConfig.nextDisable = 1;
         }
       }
@@ -75,7 +75,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
       endLogic = currentPageIndex + pages[currentPageIndex].logic.logicLength;
       if (
         pages[currentPageIndex].logic.logicOption ===
-        result[currentPageIndex].selectedOption - 1
+        selectedOptions[currentPageIndex].selectedOption - 1
       ) {
         currentPageIndex++;
         logicFlag = true;
@@ -118,8 +118,9 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
     if (currentPage) {
       currentPage.onReady = handleReady;
-      if (result[currentPageIndex]) {
-        currentPage.selectedOption = result[currentPageIndex].selectedOption;
+      if (selectedOptions[currentPageIndex]) {
+        currentPage.selectedOption =
+          selectedOptions[currentPageIndex].selectedOption;
       }
       let questionDomObj = getPageType()(currentPage);
 
@@ -141,36 +142,46 @@ function pageManager({ startPage, pages, finalPage }, container) {
   }
 
   function endQuiz(obj) {
-    result[currentPageIndex] = {};
+    // result[currentPageIndex] = {};
+    result.set("Имя", obj.nameValue);
+    result.set("Телефон", obj.nameValue);
 
-    result[currentPageIndex].question = "Имя и телефон";
-    result[currentPageIndex].answer = obj.nameValue + ", " + obj.telValue;
+    // result[currentPageIndex].question = "Имя и телефон";
+    // result[currentPageIndex].answer = obj.nameValue + ", " + obj.telValue;
 
     let requestURL = "https://xn--80a0acdi.xn--p1ai/send.php";
     sendRequest("POST", requestURL, result);
-  } 
+  }
 
   let checkString = "",
-    selectedOptionArray = [];
+    checkedOptions = [];
 
   function handleReady({ answer, question, selectedOption }) {
-    result[currentPageIndex] = {};
+    selectedOptions[currentPageIndex] = {};
+    result.set(question, answer);
+    // for (var pair of result.entries()) {
+    //   console.log(pair[0] + ": " + pair[1]);
+    // }
+    // console.log(selectedOptions);
 
-    result[currentPageIndex].question = question;
+    selectedOptions[currentPageIndex].question = question;
 
     if (pages[currentPageIndex].questionType == "check") {
       checkString = checkString + answer + ", ";
-      result[currentPageIndex].answer = checkString;
-      selectedOptionArray.push(selectedOption);
-      result[currentPageIndex].selectedOption = selectedOptionArray;
+      // selectedOptions[currentPageIndex].answer = checkString;
+      result.set(question, checkString);
+      checkedOptions.push(selectedOption);
+      selectedOptions[currentPageIndex].selectedOption = checkedOptions;
+      // console.log(checkedOptions, selectedOptions);  
     } else {
-      result[currentPageIndex].answer = answer;
-      result[currentPageIndex].selectedOption = selectedOption;
-    } 
+      //   result[currentPageIndex].answer = answer;
+      selectedOptions[currentPageIndex].selectedOption = selectedOption;
+    }
 
     if (
       pages[currentPageIndex].questionType == "rangeNumber" ||
-      pages[currentPageIndex].questionType == "check"
+      pages[currentPageIndex].questionType == "check" ||
+      pages[currentPageIndex].questionType == "file"
     )
       return;
     else goNextQuestion();

@@ -1,7 +1,7 @@
 import CreateHTML from "../utils/createHTMLBranch";
 import ElemCreator from "../utils/createElem";
 
-function filePageBuilder({ onReady, question, options, selectedOption }) {
+function filePageBuilder({ onReady, question, selectedOption }) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let schema = [
     {
@@ -11,43 +11,34 @@ function filePageBuilder({ onReady, question, options, selectedOption }) {
     },
     {
       tag: "div",
-      classList: "options-container",
+      classList: ["options-container", "file-question"],
       childNodes: [
         {
           tag: "input",
-          attrs: { type: "file" },
+          attrs: { type: "file", multiple: "" },
           classList: "file-input"
+        },
+        {
+          tag: "span",
+          classList: "input-error",
+          value: ""
         }
       ]
-      // options.map((item, i) => {
-      //   let option = {
-      //     tag: "div",
-      //     classList: "answer-radio",
-      //     attrs: { id: i.toString() },
-      //     onclick: () =>
-      //       onReady({
-      //         question: question,
-      //         answer: item,
-      //         selectedOption: i + 1
-      //       }),
-      //     childNodes: [
-      //       {
-      //         tag: "span",
-      //         classList: "answer-text",
-      //         value: item
-      //       }
-      //     ]
-      //   };
-      //   if (selectedOption && i == selectedOption - 1)
-      //     option.classList = ["answer-radio", "selected"];
-      //   return option;
-      // })
     }
   ];
-  let fileQuestion = CreateHTML(schema, questWrapper);
-  let fileInput = fileQuestion.querySelector(".file-input");
-  fileInput.addEventListener("change", () => {
-    console.log(fileInput.files);
+  let fileQuestion = CreateHTML(schema, questWrapper),
+    $fileInput = fileQuestion.querySelector(".file-input"),
+    $error = fileQuestion.querySelector(".input-error");
+
+  $fileInput.addEventListener("change", () => {
+    let filesSize = 0;
+    for (let i = 0; i < $fileInput.files.length; i++) {
+      filesSize += $fileInput.files[`${i}`].size;
+    }
+
+    filesSize / 1024 / 1024 > 10
+      ? ($error.innerHTML = "Размер файлов не должен превышать 10 Мб")
+      : ($error.innerHTML = "");
   });
 
   return fileQuestion;

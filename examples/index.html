@@ -96,26 +96,25 @@
             //     "Эмаль",
             //     "ЛДСП (эконом-вариант)"
             //   ]
-						// },
-						// {
+            // },
+            // {
             //   questionType: "rangeNumber",
             //   question: "Какова ориентировочная площадь вашей кухни, м2?",
             //   defaultValue: 30,
             //   minValue: 5,
             //   maxValue: 50
             // },
+            // {
+            //   questionType: "radio",
+            //   logic: { logicOption: 0, logicLength: 1 },
+            //   question:
+            //     "У Вас уже есть эскиз для просчета или фото для образца?",
+            //   options: ["Да", "Нет, хочу индивидуальный проект"]
+            // },
             {
-							questionType: "radio",
-							logic:{logicOption: 0, logicLength:1},
+              questionType: "file",
               question:
-                "У Вас уже есть эскиз для просчета или фото для образца?",
-              options: ["Да", "Нет, хочу индивидуальный проект"]
-            },
-            {
-							questionType: "file",
-              question:
-                "Отправьте нам Ваш эскиз или примерное фото желаемой кухни",
-              // options: ["Да", "Нет, хочу индивидуальный проект"]
+                "Отправьте нам Ваш эскиз или примерное фото желаемой кухни"
             },
             {
               questionType: "radio",
