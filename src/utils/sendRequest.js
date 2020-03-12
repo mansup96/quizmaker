@@ -4,9 +4,9 @@ function sendRequest(method, URL, body = null) {
   return fetch(URL, {
     method,
     body: body,
-    headers: { "Content-Type": "multipart/form-data" }
-	})
-	// .then(response => {
+    headers: { "Content-Type": false }
+  });
+  // .then(response => {
   //   response.text().then(value => console.log(value));
 
   //   // return response.json();

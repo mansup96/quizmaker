@@ -149,7 +149,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
     // result[currentPageIndex].question = "Имя и телефон";
     // result[currentPageIndex].answer = obj.nameValue + ", " + obj.telValue;
 
-    let requestURL = "https://xn--80a0acdi.xn--p1ai/send.php";
+    let requestURL = "send.php";
     sendRequest("POST", requestURL, result);
   }
 
@@ -158,13 +158,15 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
   function handleReady({ answer, question, selectedOption }) {
     selectedOptions[currentPageIndex] = {};
-    result.set(question, answer);
-    // for (var pair of result.entries()) {
-    //   console.log(pair[0] + ": " + pair[1]);
-    // }
-    // console.log(selectedOptions);
+		result.set(question, answer);
+		
+    for (var pair of result.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
 
-    selectedOptions[currentPageIndex].question = question;
+		selectedOptions[currentPageIndex].question = question;
+		if(pages[currentPageIndex].questionType == "file") console.log('file'); 
+		
 
     if (pages[currentPageIndex].questionType == "check") {
       checkString = checkString + answer + ", ";

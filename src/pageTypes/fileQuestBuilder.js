@@ -39,6 +39,8 @@ function filePageBuilder({ onReady, question, selectedOption }) {
     filesSize / 1024 / 1024 > 10
       ? ($error.innerHTML = "Размер файлов не должен превышать 10 Мб")
       : ($error.innerHTML = "");
+
+    onReady({ question, answer: $fileInput.files[0], selectedOption: null });
   });
 
   return fileQuestion;
