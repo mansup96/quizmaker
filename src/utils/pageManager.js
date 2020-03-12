@@ -1,21 +1,30 @@
 import RadioQuestBuilder from "../pageTypes/radioQuestBuilder";
+import CheckQuestBuilder from "../pageTypes/checkQuestBuilder";
 import StartPageBuilder from "../pageTypes/startPageBuilder";
-import createHTMLBranch from "./createHTMLBranch";
 import ImgRadioQuestBuilder from "../pageTypes/imgRadioQuestBuilder";
 import rangeNumberQuestBulder from "../pageTypes/rangeNumberQuestBuilder";
 import QuestionWrapBuilder from "../pageTypes/questionWrapBuilder";
+import fileQuestBuilder from "../pageTypes/fileQuestBuilder";
 import FinalPageBuilder from "../pageTypes/finalPageBuilder";
+import sendRequest from "../utils/sendRequest";
 
 const pageMap = {
+  check: CheckQuestBuilder,
   radio: RadioQuestBuilder,
   imgRadio: ImgRadioQuestBuilder,
-  rangeNumber: rangeNumberQuestBulder
+  rangeNumber: rangeNumberQuestBulder,
+  file: fileQuestBuilder
 };
 
 function pageManager({ startPage, pages, finalPage }, container) {
-  let currentPageIndex = -1;
-  let result = [];
+  let currentPageIndex = -1,
+    result = new FormData(),
+    selectedOptions = [],
+    logicFlag = false,
+    startLogic,
+    endLogic;
 
+  // let questionWrapper = document.getElementById("question-wrapper");
   goStartPage();
 
   function goStartPage() {
@@ -24,68 +33,98 @@ function pageManager({ startPage, pages, finalPage }, container) {
     let startPageDOM = StartPageBuilder(startPage);
 
     container.append(startPageDOM);
+
+    // document.querySelector(".button-svg").viewBox.baseVal.width = 24;
+    // document.querySelector(".button-svg").viewBox.baseVal.height = 24;
   }
-
-  // function goFirstQuestion() {
-  //   if (pages.length <= 0) return;
-  //   currentPageIndex = 0;
-
-  //   container.innerHTML = "";
-  //   let wrapConfig = {
-  //     onClickNext: goNextQuestion,
-  // 		onClickPrev: goPrevQuestion,
-  // 		result
-  //   };
-  //   container.append(QuestionWrapBuilder(wrapConfig));
-
-  //   flipQuestion();
-  // }
 
   function getBtnsConfig() {
     if (pages[currentPageIndex]) {
       let wrapConfig = {
         onClickNext: goNextQuestion,
-        onClickPrev: goPrevQuestion
+        onClickPrev: goPrevQuestion,
+        quizTitle: startPage.title,
+        pagesCount: pages.length,
+        pageIndex: currentPageIndex
       };
       if (currentPageIndex === 0) wrapConfig.prevDisable = 1;
-      if (pages[currentPageIndex].questionType !== "rangeNumber") {
-        if (!result[currentPageIndex]) {
+      if (
+        pages[currentPageIndex].questionType !== "rangeNumber" &&
+        pages[currentPageIndex].questionType !== "check" &&
+        pages[currentPageIndex].questionType !== "file"
+      ) {
+        if (!selectedOptions[currentPageIndex]) {
           wrapConfig.nextDisable = 1;
         }
       }
-      container.append(QuestionWrapBuilder(wrapConfig));
+
+      let quiz = document.getElementById("quiz");
+      quiz.prepend(QuestionWrapBuilder(wrapConfig));
     }
   }
 
   function goNextQuestion() {
+    let quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
     if (pages.length <= 0) return;
-    currentPageIndex++;
-    container.innerHTML = "";
+
+    if (currentPageIndex === -1 || !pages[currentPageIndex].logic)
+      currentPageIndex++;
+    else {
+      startLogic = currentPageIndex;
+      endLogic = currentPageIndex + pages[currentPageIndex].logic.logicLength;
+      if (
+        pages[currentPageIndex].logic.logicOption ===
+        selectedOptions[currentPageIndex].selectedOption - 1
+      ) {
+        currentPageIndex++;
+        logicFlag = true;
+      } else {
+        currentPageIndex += pages[currentPageIndex].logic.logicLength + 1;
+        logicFlag = false;
+      }
+    }
 
     getBtnsConfig();
+    let questionWrapper = document.getElementById("question-wrapper");
+    if (questionWrapper) questionWrapper.innerHTML = "";
+
     flipQuestion();
   }
 
   function goPrevQuestion() {
+    let quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
     if (pages.length <= 0) return;
-    currentPageIndex--;
-    container.innerHTML = "";
 
+    if (logicFlag) currentPageIndex--;
+    else {
+      if (currentPageIndex - 1 === endLogic)
+        currentPageIndex -= endLogic - startLogic + 1;
+      else currentPageIndex--;
+    }
     getBtnsConfig();
+    let questionWrapper = document.getElementById("question-wrapper");
+    if (questionWrapper) questionWrapper.innerHTML = "";
+
     flipQuestion();
-    П;
   }
 
   function flipQuestion() {
     let questionWrapper = document.getElementById("question-wrapper");
     if (questionWrapper) questionWrapper.innerHTML = "";
+
     let currentPage = pages[currentPageIndex];
 
     if (currentPage) {
       currentPage.onReady = handleReady;
-
+      if (selectedOptions[currentPageIndex]) {
+        currentPage.selectedOption =
+          selectedOptions[currentPageIndex].selectedOption;
+      }
       let questionDomObj = getPageType()(currentPage);
 
+      let questionWrapper = document.getElementById("question-wrapper");
       questionWrapper.append(questionDomObj);
     }
 
@@ -93,28 +132,67 @@ function pageManager({ startPage, pages, finalPage }, container) {
   }
 
   function goFinalPage() {
-    container.innerHTML = "";
-    finalPage.onReady = () => console.log("точно конец");
-    let finalPageDOM = FinalPageBuilder(finalPage);
+    let quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
 
-    container.append(finalPageDOM);
+    finalPage.onReady = endQuiz;
+
+    let finalPageDOM = FinalPageBuilder(finalPage);
+    quiz.append(finalPageDOM);
+
+    for (var pair of result.entries()) {
+      console.log(pair);
+    }
   }
 
-  function handleReady({ answer, question }) {
-    result[currentPageIndex] = {};
+  function endQuiz(obj) {
+    // result[currentPageIndex] = {};
+    result.set("Имя", obj.nameValue);
+    result.set("Телефон", obj.telValue);
 
-    // if (currentPageIndex) {
-    //   let prevButton = document.querySelector(".prev-button");
-    //   console.log(prevButton);
-    // }
+    // result[currentPageIndex].question = "Имя и телефон";
+    // result[currentPageIndex].answer = obj.nameValue + ", " + obj.telValue;
 
-    result[currentPageIndex].question = question;
+    let requestURL = "send.php";
+    // sendRequest("POST", requestURL, result);
 
-    result[currentPageIndex].answer = answer;
+    let xhr = new XMLHttpRequest();
+		xhr.open("POST", "send.php");
+		// "https://xn--80a0acdi.xn--p1ai/send.php"
+		xhr.send(result);
+  }
 
-    if (pages[currentPageIndex].questionType !== "rangeNumber")
-      goNextQuestion();
-    else return;
+  let checkString = "",
+    checkedOptions = [];
+
+  function handleReady({ answer, question, selectedOption }) {
+    selectedOptions[currentPageIndex] = {};
+
+    if (pages[currentPageIndex].questionType == "file")
+      result.append(question, answer);
+    else result.set(question, answer);
+
+    selectedOptions[currentPageIndex].question = question;
+
+    if (pages[currentPageIndex].questionType == "check") {
+      checkString = checkString + answer + ", ";
+      // selectedOptions[currentPageIndex].answer = checkString;
+      result.set(question, checkString);
+      checkedOptions.push(selectedOption);
+      selectedOptions[currentPageIndex].selectedOption = checkedOptions;
+      // console.log(checkedOptions, selectedOptions);
+    } else {
+      //   result[currentPageIndex].answer = answer;
+      selectedOptions[currentPageIndex].selectedOption = selectedOption;
+    }
+
+    if (
+      pages[currentPageIndex].questionType == "rangeNumber" ||
+      pages[currentPageIndex].questionType == "check" ||
+      pages[currentPageIndex].questionType == "file"
+    )
+      return;
+    else goNextQuestion();
   }
 
   function getPageType() {

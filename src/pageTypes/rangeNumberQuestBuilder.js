@@ -6,12 +6,17 @@ function rangeNumberQuestBuilder({
   question,
   maxValue,
   minValue,
-  defaultValue
+  defaultValue,
+  selectedOption
 }) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
   let delta = maxValue - minValue,
-    gamma = defaultValue - minValue,
-    defaultWidth = (gamma * 100) / delta;
+    gamma = defaultValue - minValue;
+  if (selectedOption) {
+    gamma = selectedOption - minValue;
+    defaultValue = selectedOption;
+  }
+  let defaultWidth = (gamma * 100) / delta;
   let schema = [
     {
       tag: "div",
@@ -35,37 +40,45 @@ function rangeNumberQuestBuilder({
         {
           tag: "div",
           classList: "progressbar",
-          attrs: {
-            style: "background-color: black; height: 20px; width: 100%"
-          },
           childNodes: [
             {
               tag: "div",
               classList: "progress-indikator",
               attrs: {
-                style: `position: relative; transition: .1s; background-color: red; height: 20px; width: ${defaultWidth}%`
+                style: `width: ${defaultWidth}%`
               },
               childNodes: [
                 {
                   tag: "p",
-                  classList: "runner",
-                  attrs: {
-                    style: `position: absolute; height: 30px; width: 10px; right: -5px; background-color: green; margin: 0; top: -5px;`
-                    // draggable: "true"
-                  }
+                  classList: "runner"
                 }
               ]
+            }
+          ]
+        },
+        {
+          tag: "div",
+          classList: "extreme-points",
+          childNodes: [
+            {
+              tag: "p",
+              classList: "point",
+              value: minValue
+            },
+            {
+              tag: "p",
+              classList: "point",
+              value: maxValue
             }
           ]
         }
       ]
     }
   ];
+
   function addHandler(object, event, handler) {
     if (object.addEventListener) {
       object.addEventListener(event, handler, false);
-      // } else if (object.attachEvent) {
-      //   object.attachEvent("on" + event, handler);
     } else alert("Обработчик не поддерживается");
   }
   function removeHandler(object, event, handler) {
@@ -77,15 +90,24 @@ function rangeNumberQuestBuilder({
   let input = rangeQuestion.querySelector(".range-input"),
     progressIndikator = rangeQuestion.querySelector(".progress-indikator"),
     progressBar = rangeQuestion.querySelector(".progressbar");
-
-  onReady({ question: question, answer: input.value });
+  onReady({
+    question: question,
+    answer: input.value,
+    selectedOption: input.value
+  });
 
   addHandler(input, "input", syncBarWithInput);
   function syncBarWithInput() {
-    let progressWidth = ((input.value - minValue) * 100) / delta;
-    progressIndikator.style.width = `${progressWidth}%`;
-    progressIndikator.style.transition = `.2s`;
-    onReady({ question: question, answer: input.value });
+    if (input.value <= maxValue) {
+      let progressWidth = ((input.value - minValue) * 100) / delta;
+      progressIndikator.style.width = `${progressWidth}%`;
+      progressIndikator.style.transition = `.2s`;
+      onReady({
+        question: question,
+        answer: input.value,
+        selectedOption: input.value
+      });
+    }
   }
 
   addHandler(progressBar, "mousedown", getValueFromMouse);
@@ -100,7 +122,11 @@ function rangeNumberQuestBuilder({
         let progressWidth = ((widthFromMouse - minValue) * 100) / delta;
         progressIndikator.style.width = `${progressWidth}%`;
         input.value = widthFromMouse;
-        onReady({ question: question, answer: input.value });
+        onReady({
+          question: question,
+          answer: input.value,
+          selectedOption: input.value
+        });
       }
     }
   }
@@ -120,7 +146,11 @@ function rangeNumberQuestBuilder({
   function mouseUp() {
     progressIndikator.style.transition = `0.2s`;
     removeHandler(window, "mousemove", getValueFromMouse);
-    onReady({ question: question, answer: input.value });
+    onReady({
+      question: question,
+      answer: input.value,
+      selectedOption: input.value
+    });
   }
   return rangeQuestion;
 }

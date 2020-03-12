@@ -1,8 +1,9 @@
 import CreateHTML from "../utils/createHTMLBranch";
 import ElemCreator from "../utils/createElem";
 
-function radioPageBuilder({ onReady, question, options, selectedOption }) {
+function chechQuestBuilder({ onReady, question, options, selectedOption }) {
   let questWrapper = ElemCreator({ tag: "div", classList: "wrapper" });
+  console.log(selectedOption);
   let schema = [
     {
       tag: "div",
@@ -15,7 +16,7 @@ function radioPageBuilder({ onReady, question, options, selectedOption }) {
       childNodes: options.map((item, i) => {
         let option = {
           tag: "div",
-          classList: "answer-radio",
+          classList: "answer-check",
           attrs: { id: i.toString() },
           onclick: () =>
             onReady({
@@ -31,14 +32,28 @@ function radioPageBuilder({ onReady, question, options, selectedOption }) {
             }
           ]
         };
-        if (selectedOption && i == selectedOption - 1)
-          option.classList = ["answer-radio", "selected"];
+        if (selectedOption)
+          for (let j = 0; j < selectedOption.length; j++) {
+            if (i == selectedOption[j] - 1) {
+              option.classList = ["answer-check", "selected"];
+            }
+          }
         return option;
       })
     }
   ];
-  let radioQuestion = CreateHTML(schema, questWrapper);
-  return radioQuestion;
+
+  let checkQuestion = CreateHTML(schema, questWrapper);
+
+  let selectedAnswers = checkQuestion.querySelectorAll(".answer-check");
+
+  selectedAnswers.forEach(elem => {
+    elem.addEventListener("click", () => {
+      elem.classList.toggle("selected");
+    });
+  });
+
+  return checkQuestion;
 }
 
-export default radioPageBuilder;
+export default chechQuestBuilder;

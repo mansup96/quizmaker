@@ -5,7 +5,7 @@
 	"main": "src/app.js",
 	"scripts": {
 		"test": "jest --watch",
-		"build": "webpack -w",
+		"build": "webpack --watch",
 		"start": "webpack-dev-server --mode development --open"
 	},
 	"repository": {
