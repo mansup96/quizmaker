@@ -139,18 +139,27 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
     let finalPageDOM = FinalPageBuilder(finalPage);
     quiz.append(finalPageDOM);
+
+    for (var pair of result.entries()) {
+      console.log(pair);
+    }
   }
 
   function endQuiz(obj) {
     // result[currentPageIndex] = {};
     result.set("Имя", obj.nameValue);
-    result.set("Телефон", obj.nameValue);
+    result.set("Телефон", obj.telValue);
 
     // result[currentPageIndex].question = "Имя и телефон";
     // result[currentPageIndex].answer = obj.nameValue + ", " + obj.telValue;
 
     let requestURL = "send.php";
-    sendRequest("POST", requestURL, result);
+    // sendRequest("POST", requestURL, result);
+
+    let xhr = new XMLHttpRequest();
+		xhr.open("POST", "send.php");
+		// "https://xn--80a0acdi.xn--p1ai/send.php"
+		xhr.send(result);
   }
 
   let checkString = "",
@@ -158,15 +167,12 @@ function pageManager({ startPage, pages, finalPage }, container) {
 
   function handleReady({ answer, question, selectedOption }) {
     selectedOptions[currentPageIndex] = {};
-		result.set(question, answer);
-		
-    for (var pair of result.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
 
-		selectedOptions[currentPageIndex].question = question;
-		if(pages[currentPageIndex].questionType == "file") console.log('file'); 
-		
+    if (pages[currentPageIndex].questionType == "file")
+      result.append(question, answer);
+    else result.set(question, answer);
+
+    selectedOptions[currentPageIndex].question = question;
 
     if (pages[currentPageIndex].questionType == "check") {
       checkString = checkString + answer + ", ";
@@ -174,7 +180,7 @@ function pageManager({ startPage, pages, finalPage }, container) {
       result.set(question, checkString);
       checkedOptions.push(selectedOption);
       selectedOptions[currentPageIndex].selectedOption = checkedOptions;
-      // console.log(checkedOptions, selectedOptions);  
+      // console.log(checkedOptions, selectedOptions);
     } else {
       //   result[currentPageIndex].answer = answer;
       selectedOptions[currentPageIndex].selectedOption = selectedOption;

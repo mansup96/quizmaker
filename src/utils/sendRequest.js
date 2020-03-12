@@ -15,7 +15,7 @@ function sendRequest(method, URL, body = null) {
   //   //   let e = new Error("Что-то пошло не так");
   //   //   e.data = error;
   //   //   throw e;
-  //   // });
+  //   // }); 
   // });
 }
 

@@ -36,11 +36,19 @@ function filePageBuilder({ onReady, question, selectedOption }) {
       filesSize += $fileInput.files[`${i}`].size;
     }
 
-    filesSize / 1024 / 1024 > 10
-      ? ($error.innerHTML = "Размер файлов не должен превышать 10 Мб")
-      : ($error.innerHTML = "");
+    if (filesSize / 1024 / 1024 > 10) {
+      $error.innerHTML = "Размер файлов не должен превышать 10 Мб";
+    } else {
+      $error.innerHTML = "";
 
-    onReady({ question, answer: $fileInput.files[0], selectedOption: null });
+      for (let j = 0; j < $fileInput.files.length; j++) {
+        onReady({
+          question: "myfile[]",
+          answer: $fileInput.files[j],
+          selectedOption: null
+        });
+      }
+    }
   });
 
   return fileQuestion;
